@@ -7,6 +7,8 @@ import os
 
 logger = logging.getLogger(__name__)
 
+SIAAS_VERSION = "1.0.0"
+
 _cmd_options = [
     click.option('-a', '--api', help="SIAAS API URI.", envvar='SIAAS_API_URI'),
     click.option('-u', '--user', help="SIAAS API user.", envvar='SIAAS_API_USER'),
@@ -25,7 +27,7 @@ def add_options(options):
     return _add_options
 
 @click.group()
-@click.version_option(version="1.0.0")
+@click.version_option(version=SIAAS_VERSION)
 def siaas():
     """A CLI wrapper for the SIAAS API."""
 
