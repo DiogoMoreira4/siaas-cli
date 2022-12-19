@@ -310,6 +310,21 @@ def agents_history_show(api: str, user: str, password: str, ca_bundle: str, inse
     else:
         logger.error("Error getting data from the API: "+str(r.status_code))
 
+"""
+TO DO:
+
+server-configs-add-or-update
+server-configs-remove
+server-configs-clear
+agents-data-delete <agent_uid>
+agents-configs-add-or-update <agent_uid> <key:value>
+agents-configs-remove <agent_uid> <key>
+agents-configs-clear <agent_uid>
+agents-configs-broadcast-add-or-update <key:value>
+agents-configs-broadcast-remove <key>
+agents-configs-broadcast-clear
+
+"""
 
 if __name__ == '__main__':
     siaas(prog_name='siaas-cli')
