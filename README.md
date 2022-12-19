@@ -12,7 +12,7 @@ __
 
  - Install and configure: `sudo ./siaas_cli_install_and_configure.sh`
 
- - Usage: `./siaas-cli.py`
+ - Usage: `siaas-cli` or `./siaas_cli_run.sh`
 
  - Logs: `tail -100f ./log/siaas-cli.log`
 
