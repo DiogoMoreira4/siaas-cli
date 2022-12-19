@@ -54,8 +54,9 @@ def api_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool)
 @click.option('-p', '--password', help="SIAAS API password.", envvar='SIAAS_API_PWD')
 @click.option('-c', '--ca_bundle', help="SIAAS SSL CA bundle path.", envvar='SIAAS_API_SSL_CA_BUNDLE')
 @click.option('-i', '--insecure', is_flag=True, help="Don't verify SSL endpoint.", envvar='SIAAS_API_SSL_IGNORE_VERIFY')
+@click.option('-m', '--module', help="Only show these module(s) (comma-separated).")
 @siaas.command("server-show")
-def server_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool):
+def server_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool, module: str):
     """
     Shows server information.
     """
@@ -69,7 +70,10 @@ def server_show(api: str, user: str, password: str, ca_bundle: str, insecure: bo
        else:
          verify=True
     try:
-        r = requests.get(api+"/siaas-server", timeout=60, verify=verify, allow_redirects=True, auth=(user,password))
+        uri_request=api+"/siaas-server"
+        if len(module or '') > 0:
+            uri_request+="?module="+module
+        r = requests.get(uri_request, timeout=60, verify=verify, allow_redirects=True, auth=(user,password))
     except Exception as e:
         logger.error("Error while performing a GET request to the API: "+str(e))
         return False
