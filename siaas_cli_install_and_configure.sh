@@ -12,4 +12,8 @@ cd ${SCRIPT_DIR}
 apt-get update
 apt-get install -y python3 python3-pip python3-venv git
 
+# SERVICE CONFIGURATION
+ln -fs ${SCRIPT_DIR}/siaas_cli_run.sh /usr/local/bin/siaas-cli
+#ln -fs ${SCRIPT_DIR}/log /var/log/siaas-cli
+
 echo -e "\nSIAAS CLI is installed. To use it: ./siaas-cli.py\n"
