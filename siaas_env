@@ -1,0 +1,6 @@
+export SIAAS_API_URI=https://siaas/api
+export SIAAS_API_USER=siaas
+export SIAAS_API_PWD=siaas
+export SIAAS_API_SSL_IGNORE_VERIFY=false
+export SIAAS_API_SSL_CA_BUNDLE=./ssl/siaas.crt
+export SIAAS_LOG_LEVEL=warn
