@@ -163,7 +163,7 @@ def api_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool,
 
 
 @add_options(_cmd_options)
-@click.option('-m', '--module', help="Only show these module(s) (comma-separated).")
+@click.option('-m', '--module', help="Only show these modules (comma-separated).")
 @siaas.command("server-show")
 def server_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, module: str):
     """
@@ -436,7 +436,7 @@ def agents_show(api: str, user: str, password: str, ca_bundle: str, insecure: bo
 
 
 @add_options(_cmd_options)
-@click.option('-m', '--module', help="Only show these module(s) (comma-separated).")
+@click.option('-m', '--module', help="Only show these modules (comma-separated).")
 @click.argument('agent_uid', nargs=1, required=0)
 @siaas.command("agents-data-show")
 def agents_data_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, agent_uid: str, module: str):
@@ -928,7 +928,7 @@ def agents_configs_broadcast_clear(api: str, user: str, password: str, ca_bundle
 
 
 @add_options(_cmd_options)
-@click.option('-m', '--module', help="Only show these module(s) (comma-separated).")
+@click.option('-m', '--module', help="Only show these modules (comma-separated).")
 @click.option('-l', '--limit', help="Max number of records to show. (0 means no limit). (Default: 100)", default=100)
 @click.option('-d', '--days', help="Max number of days to show. (Default: 2)", default=2)
 @click.option('-s', '--sort', help="Use 'agent' or 'date' to sort. (Default: 'date')", default="date")
@@ -987,8 +987,8 @@ def agents_history_show(api: str, user: str, password: str, ca_bundle: str, inse
 
 
 @add_options(_cmd_options)
-@click.option('-a', '--agent', help="Only shows results scanned by these agent(s) (comma-separated).")
-@click.option('-t', '--target-host', help="Only shows results targeting these host(s) (comma-separated).")
+@click.option('-a', '--agent', help="Only shows results scanned by these agents (comma-separated).")
+@click.option('-t', '--target-host', help="Only shows results targeting these hosts (comma-separated).")
 @click.option('-r', '--report-type', help="Type of report to generate ('all', 'vuln_only', 'exploit_only'). (Default: 'exploit_only')", default="exploit_only")
 @siaas.command("vuln-report")
 def vuln_report(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, agent: str, target_host: str, report_type: str):
