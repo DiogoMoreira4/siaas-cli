@@ -179,10 +179,14 @@ def server_configs_add_or_update(api: str, user: str, password: str, ca_bundle: 
     delta_config_dict = {}
     current_config_dict = r.json()["output"]
     for kv in key_value.split(','):
-        config_name = kv.split("=", 1)[0].rstrip().lstrip()
-        if not bool(re.match(pattern, config_name)):
-            raise ValueError("Invalid character in config key.")
-        config_value = kv.split("=", 1)[1].rstrip().lstrip()
+        try:
+           config_name = kv.split("=", 1)[0].rstrip().lstrip()
+           if not bool(re.match(pattern, config_name)):
+              raise ValueError("Invalid character in key: "+config_name)
+           config_value = kv.split("=", 1)[1].rstrip().lstrip()
+        except Exception as e:
+           logger.warning("Key-value '"+str(kv)+"' was ignored: "+str(e))
+           continue
         delta_config_dict[config_name]=config_value
     try:
         new_config_dict = dict(list(current_config_dict.items()) + list(delta_config_dict.items()))
@@ -508,10 +512,14 @@ def agents_configs_add_or_update(api: str, user: str, password: str, ca_bundle: 
         if a in r.json()["output"].keys():
            current_config_dict = r.json()["output"][a]
         for kv in key_value.split(','):
-           config_name = kv.split("=", 1)[0].rstrip().lstrip()
-           if not bool(re.match(pattern, config_name)):
-              raise ValueError("Invalid character in config key.")
-           config_value = kv.split("=", 1)[1].rstrip().lstrip()
+           try:
+              config_name = kv.split("=", 1)[0].rstrip().lstrip()
+              if not bool(re.match(pattern, config_name)):
+                 raise ValueError("Invalid character in key: "+config_name)
+              config_value = kv.split("=", 1)[1].rstrip().lstrip()
+           except Exception as e:
+              logger.warning("Key-value '"+str(kv)+"' was ignored: "+str(e))
+              continue
            delta_config_dict[config_name]=config_value
         try:
             new_config_dict = dict(list(current_config_dict.items()) + list(delta_config_dict.items()))
@@ -704,10 +712,14 @@ def agents_configs_broadcast_add_or_update(api: str, user: str, password: str, c
     if agent_uid in r.json()["output"].keys():
         current_config_dict = r.json()["output"][agent_uid]
     for kv in key_value.split(','):
-        config_name = kv.split("=", 1)[0].rstrip().lstrip()
-        if not bool(re.match(pattern, config_name)):
-            raise ValueError("Invalid character in config key.")
-        config_value = kv.split("=", 1)[1].rstrip().lstrip()
+        try:
+           config_name = kv.split("=", 1)[0].rstrip().lstrip()
+           if not bool(re.match(pattern, config_name)):
+              raise ValueError("Invalid character in key: "+config_name)
+           config_value = kv.split("=", 1)[1].rstrip().lstrip()
+        except Exception as e:
+           logger.warning("Key-value '"+str(kv)+"' was ignored: "+str(e))
+           continue
         delta_config_dict[config_name]=config_value
     try:
         new_config_dict = dict(list(current_config_dict.items()) + list(delta_config_dict.items()))
