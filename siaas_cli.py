@@ -4,7 +4,6 @@ import urllib3
 import pprint
 import logging
 import os
-import re
 
 logger = logging.getLogger(__name__)
 
@@ -181,8 +180,6 @@ def server_configs_add_or_update(api: str, user: str, password: str, ca_bundle: 
     for kv in key_value.split(','):
         try:
            config_name = kv.split("=", 1)[0].rstrip().lstrip()
-           if not bool(re.match(pattern, config_name)):
-              raise ValueError("Invalid character in key: "+config_name)
            config_value = kv.split("=", 1)[1].rstrip().lstrip()
         except Exception as e:
            logger.warning("Key-value '"+str(kv)+"' was ignored: "+str(e))
@@ -514,8 +511,6 @@ def agents_configs_add_or_update(api: str, user: str, password: str, ca_bundle: 
         for kv in key_value.split(','):
            try:
               config_name = kv.split("=", 1)[0].rstrip().lstrip()
-              if not bool(re.match(pattern, config_name)):
-                 raise ValueError("Invalid character in key: "+config_name)
               config_value = kv.split("=", 1)[1].rstrip().lstrip()
            except Exception as e:
               logger.warning("Key-value '"+str(kv)+"' was ignored: "+str(e))
@@ -714,8 +709,6 @@ def agents_configs_broadcast_add_or_update(api: str, user: str, password: str, c
     for kv in key_value.split(','):
         try:
            config_name = kv.split("=", 1)[0].rstrip().lstrip()
-           if not bool(re.match(pattern, config_name)):
-              raise ValueError("Invalid character in key: "+config_name)
            config_value = kv.split("=", 1)[1].rstrip().lstrip()
         except Exception as e:
            logger.warning("Key-value '"+str(kv)+"' was ignored: "+str(e))
