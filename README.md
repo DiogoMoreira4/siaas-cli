@@ -14,7 +14,7 @@ __
 
  - Usage:
 
-1. Export the credentials: `source ./siaas_env`
+1. Edit and then export the credentials file: `source ./siaas_env`
 2. Run the CLI: `siaas-cli` or `./siaas_cli_run.sh`
 
  - Logs: `tail -100f ./log/siaas-cli.log`
