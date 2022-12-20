@@ -15,8 +15,9 @@ _cmd_options = [
     click.option('-P', '--password', help="SIAAS API password.", envvar='SIAAS_API_PWD'),
     click.option('-C', '--ca-bundle', help="SIAAS SSL CA bundle path.", envvar='SIAAS_API_SSL_CA_BUNDLE'),
     click.option('-I', '--insecure', is_flag=True, help="Don't verify SSL endpoint.", envvar='SIAAS_API_SSL_IGNORE_VERIFY'),
-    click.option('-T', '--timeout', help="SIAAS SSL API timeout. (Default: 60)", envvar='SIAAS_API_TIMEOUT', default=60),
-    click.option('-D', '--debug', is_flag=True, help="SIAAS debug logs. (Default: False)", envvar='SIAAS_DEBUG_LOGS')
+    click.option('-T', '--timeout', help="SIAAS API timeout. (Default: 60)", envvar='SIAAS_API_TIMEOUT', default=60),
+    click.option('-D', '--debug', is_flag=True, help="Enable debug logs.", envvar='SIAAS_DEBUG_LOGS'),
+    click.option('-L', '--chars-line', help="Maximum chars per line. (Default: 500)", envvar='SIAAS_MAX_CHARS_LINE', default=500)
 ]
 
 
@@ -129,7 +130,7 @@ def siaas():
 
 @add_options(_cmd_options)
 @siaas.command("api-show")
-def api_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool):
+def api_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int):
     """
     Shows API information.
     """
@@ -155,7 +156,7 @@ def api_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool,
     if r.status_code == 200:
         logger.debug("All data that was read from the API:\n" +
                      pprint.pformat(r.json(), sort_dicts=False))
-        print(pprint.pformat(r.json(), sort_dicts=False))
+        print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         return True
     else:
         logger.error("Error getting data from the API: "+str(r.status_code))
@@ -165,7 +166,7 @@ def api_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool,
 @add_options(_cmd_options)
 @click.option('-m', '--module', help="Only show these modules (comma-separated).")
 @siaas.command("server-show")
-def server_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, module: str):
+def server_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int, module: str):
     """
     Shows server information.
     """
@@ -194,7 +195,7 @@ def server_show(api: str, user: str, password: str, ca_bundle: str, insecure: bo
     if r.status_code == 200:
         logger.debug("All data that was read from the API:\n" +
                      pprint.pformat(r.json(), sort_dicts=False))
-        print(pprint.pformat(r.json(), sort_dicts=False))
+        print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         return True
     else:
         logger.error("Error getting data from the API: "+str(r.status_code))
@@ -203,7 +204,7 @@ def server_show(api: str, user: str, password: str, ca_bundle: str, insecure: bo
 
 @add_options(_cmd_options)
 @siaas.command("server-configs-show")
-def server_configs_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool):
+def server_configs_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int):
     """
     Shows configs for the server.
     """
@@ -229,7 +230,7 @@ def server_configs_show(api: str, user: str, password: str, ca_bundle: str, inse
     if r.status_code == 200:
         logger.debug("All data that was read from the API:\n" +
                      pprint.pformat(r.json(), sort_dicts=False))
-        print(pprint.pformat(r.json(), sort_dicts=False))
+        print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         return True
     else:
         logger.error("Error getting data from the API: "+str(r.status_code))
@@ -239,7 +240,7 @@ def server_configs_show(api: str, user: str, password: str, ca_bundle: str, inse
 @add_options(_cmd_options)
 @click.argument('key_value', nargs=1, required=1)
 @siaas.command("server-configs-add-or-update")
-def server_configs_add_or_update(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, key_value: str):
+def server_configs_add_or_update(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int, key_value: str):
     """
     Adds or updates server configuration keys (accepts multiple configuration key=value pairs, comma-separated).
     """
@@ -294,7 +295,7 @@ def server_configs_add_or_update(api: str, user: str, password: str, ca_bundle: 
                       pprint.pformat(new_config_dict, sort_dicts=False))
         logger.debug("Posting output from the API:\n" +
                       pprint.pformat(r.json(), sort_dicts=False))
-        print(pprint.pformat(r.json(), sort_dicts=False))
+        print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         return True
     else:
         logger.error("Error posting data to the API: "+str(r.status_code))
@@ -304,7 +305,7 @@ def server_configs_add_or_update(api: str, user: str, password: str, ca_bundle: 
 @add_options(_cmd_options)
 @click.argument('key', nargs=1, required=1)
 @siaas.command("server-configs-remove")
-def server_configs_remove(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, key: str):
+def server_configs_remove(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int, key: str):
     """
     Removes server configuration keys (accepts multiple configuration keys, comma-separated).
     """
@@ -352,7 +353,7 @@ def server_configs_remove(api: str, user: str, password: str, ca_bundle: str, in
                       pprint.pformat(new_config_dict, sort_dicts=False))
         logger.debug("Posting output from the API:\n" +
                       pprint.pformat(r.json(), sort_dicts=False))
-        print(pprint.pformat(r.json(), sort_dicts=False))
+        print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         return True
     else:
         logger.error("Error posting data to the API: "+str(r.status_code))
@@ -361,7 +362,7 @@ def server_configs_remove(api: str, user: str, password: str, ca_bundle: str, in
 
 @add_options(_cmd_options)
 @siaas.command("server-configs-clear")
-def server_configs_clear(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool):
+def server_configs_clear(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int):
     """
     Clears all server configuration keys.
     """
@@ -389,7 +390,7 @@ def server_configs_clear(api: str, user: str, password: str, ca_bundle: str, ins
     if r.status_code == 200:
         logger.debug("Deletion output from the API:\n" +
             pprint.pformat(r.json(), sort_dicts=False))
-        print(pprint.pformat(r.json(), sort_dicts=False))
+        print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         return True
     else:
         logger.error("Error deleting data from the API: "+str(r.status_code))
@@ -399,7 +400,7 @@ def server_configs_clear(api: str, user: str, password: str, ca_bundle: str, ins
 @add_options(_cmd_options)
 @click.option('-s', '--sort', help="Use 'agent' or 'date' to sort. (Default: 'date')", default="date")
 @siaas.command("agents-show")
-def agents_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, sort: str):
+def agents_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int, sort: str):
     """
     Shows agents information.
     """
@@ -428,7 +429,7 @@ def agents_show(api: str, user: str, password: str, ca_bundle: str, insecure: bo
     if r.status_code == 200:
         logger.debug("All data that was read from the API:\n" +
                      pprint.pformat(r.json(), sort_dicts=False))
-        print(pprint.pformat(r.json(), sort_dicts=False))
+        print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         return True
     else:
         logger.error("Error getting data from the API: "+str(r.status_code))
@@ -439,7 +440,7 @@ def agents_show(api: str, user: str, password: str, ca_bundle: str, insecure: bo
 @click.option('-m', '--module', help="Only show these modules (comma-separated).")
 @click.argument('agent_uid', nargs=1, required=0)
 @siaas.command("agents-data-show")
-def agents_data_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, agent_uid: str, module: str):
+def agents_data_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int, agent_uid: str, module: str):
     """
     Shows most recent data/metrics from agents (accepts multiple agent UIDs, comma-separated).
     """
@@ -471,7 +472,7 @@ def agents_data_show(api: str, user: str, password: str, ca_bundle: str, insecur
     if r.status_code == 200:
         logger.debug("All data that was read from the API:\n" +
                      pprint.pformat(r.json(), sort_dicts=False))
-        print(pprint.pformat(r.json(), sort_dicts=False))
+        print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         return True
     else:
         logger.error("Error getting data from the API: "+str(r.status_code))
@@ -482,7 +483,7 @@ def agents_data_show(api: str, user: str, password: str, ca_bundle: str, insecur
 @click.option('-d', '--days', help="Number of days to keep. (Default: 15)", default=15)
 @click.argument('agent_uid', nargs=1, required=1)
 @siaas.command("agents-data-delete")
-def agents_data_delete(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, agent_uid: str, days: int):
+def agents_data_delete(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int, agent_uid: str, days: int):
     """
     Deletes agent data (accepts multiple agent UIDs, comma-separated).
     """
@@ -511,7 +512,7 @@ def agents_data_delete(api: str, user: str, password: str, ca_bundle: str, insec
     if r.status_code == 200:
         logger.debug("Deletion output from the API:\n" +
             pprint.pformat(r.json(), sort_dicts=False))
-        print(pprint.pformat(r.json(), sort_dicts=False))
+        print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         return True
     else:
         logger.error("Error deleting data from the API: "+str(r.status_code))
@@ -522,7 +523,7 @@ def agents_data_delete(api: str, user: str, password: str, ca_bundle: str, insec
 @click.option('-b', '--broadcast', is_flag=True, help="Merge broadcast configurations.")
 @click.argument('agent_uid', nargs=1, required=0)
 @siaas.command("agents-configs-show")
-def agents_configs_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, agent_uid: str, broadcast: bool):
+def agents_configs_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int, agent_uid: str, broadcast: bool):
     """
     Shows configs for the agents (accepts multiple agent UIDs, comma-separated).
     """
@@ -556,7 +557,7 @@ def agents_configs_show(api: str, user: str, password: str, ca_bundle: str, inse
     if r.status_code == 200:
         logger.debug("All data that was read from the API:\n" +
                      pprint.pformat(r.json(), sort_dicts=False))
-        print(pprint.pformat(r.json(), sort_dicts=False))
+        print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         return True
     else:
         logger.error("Error getting data from the API: "+str(r.status_code))
@@ -567,7 +568,7 @@ def agents_configs_show(api: str, user: str, password: str, ca_bundle: str, inse
 @click.argument('key_value', nargs=1, required=1)
 @click.argument('agent_uid', nargs=1, required=1)
 @siaas.command("agents-configs-add-or-update")
-def agents_configs_add_or_update(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, agent_uid: str, key_value: str):
+def agents_configs_add_or_update(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int, agent_uid: str, key_value: str):
     """
     Adds or updates agent configuration keys (accepts multiple agent UIDs and also multiple configuration key=value pairs, comma-separated).
     """
@@ -623,7 +624,7 @@ def agents_configs_add_or_update(api: str, user: str, password: str, ca_bundle: 
         if r2.status_code == 200:
             logger.debug("All data that was written to the server API:\n" +
                           pprint.pformat(new_config_dict, sort_dicts=False))
-            print(pprint.pformat(r2.json(), sort_dicts=False))
+            print(pprint.pformat(r2.json(), sort_dicts=False, width=chars_line))
         else:
             logger.error("Error posting data to the server API: "+str(r2.status_code))
             result=False
@@ -634,7 +635,7 @@ def agents_configs_add_or_update(api: str, user: str, password: str, ca_bundle: 
 @click.argument('key', nargs=1, required=1)
 @click.argument('agent_uid', nargs=1, required=1)
 @siaas.command("agents-configs-remove")
-def agents_configs_remove(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, agent_uid: str, key: str):
+def agents_configs_remove(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int, agent_uid: str, key: str):
     """
     Removes agent configuration keys (accepts multiple agent UIDs and also multiple configuration keys, comma-separated).
     """
@@ -683,7 +684,7 @@ def agents_configs_remove(api: str, user: str, password: str, ca_bundle: str, in
         if r2.status_code == 200:
             logger.debug("All data that was written to the server API:\n" +
                           pprint.pformat(new_config_dict, sort_dicts=False))
-            print(pprint.pformat(r2.json(), sort_dicts=False))
+            print(pprint.pformat(r2.json(), sort_dicts=False, width=chars_line))
         else:
             logger.error("Error posting data to the server API: "+str(r2.status_code))
             result=False
@@ -692,7 +693,7 @@ def agents_configs_remove(api: str, user: str, password: str, ca_bundle: str, in
 @add_options(_cmd_options)
 @click.argument('agent_uid', nargs=1, required=1)
 @siaas.command("agents-configs-clear")
-def agents_configs_clear(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, agent_uid: str):
+def agents_configs_clear(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int, agent_uid: str):
     """
     Clears all agent configuration keys (accepts multiple agent UIDs, comma-separated).
     """
@@ -720,7 +721,7 @@ def agents_configs_clear(api: str, user: str, password: str, ca_bundle: str, ins
     if r.status_code == 200:
         logger.debug("Output from the API:\n" +
             pprint.pformat(r.json(), sort_dicts=False))
-        print(pprint.pformat(r.json(), sort_dicts=False))
+        print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         return True
     else:
         logger.error("Error interacting with the server API: "+str(r.status_code))
@@ -728,7 +729,7 @@ def agents_configs_clear(api: str, user: str, password: str, ca_bundle: str, ins
 
 @add_options(_cmd_options)
 @siaas.command("agents-configs-broadcast-show")
-def agents_configs_broadcast_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool):
+def agents_configs_broadcast_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int):
     """
     Shows broadcast configs for the agents.
     """
@@ -756,7 +757,7 @@ def agents_configs_broadcast_show(api: str, user: str, password: str, ca_bundle:
     if r.status_code == 200:
         logger.debug("All data that was read from the API:\n" +
                      pprint.pformat(r.json(), sort_dicts=False))
-        print(pprint.pformat(r.json(), sort_dicts=False))
+        print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         return True
     else:
         logger.error("Error getting data from the API: "+str(r.status_code))
@@ -766,7 +767,7 @@ def agents_configs_broadcast_show(api: str, user: str, password: str, ca_bundle:
 @add_options(_cmd_options)
 @click.argument('key_value', nargs=1, required=1)
 @siaas.command("agents-configs-broadcast-add-or-update")
-def agents_configs_broadcast_add_or_update(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, key_value: str):
+def agents_configs_broadcast_add_or_update(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int, key_value: str):
     """
     Adds or updates agent broadcast configuration keys (accepts multiple configuration key=value pairs, comma-separated).
     """
@@ -823,7 +824,7 @@ def agents_configs_broadcast_add_or_update(api: str, user: str, password: str, c
                       pprint.pformat(new_config_dict, sort_dicts=False))
         logger.debug("Posting output from the API:\n" +
                       pprint.pformat(r.json(), sort_dicts=False))
-        print(pprint.pformat(r.json(), sort_dicts=False))
+        print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         return True
     else:
         logger.error("Error posting data to the API: "+str(r.status_code))
@@ -833,7 +834,7 @@ def agents_configs_broadcast_add_or_update(api: str, user: str, password: str, c
 @add_options(_cmd_options)
 @click.argument('key', nargs=1, required=1)
 @siaas.command("agents-configs-broadcast-remove")
-def agents_configs_broadcast_remove(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, key: str):
+def agents_configs_broadcast_remove(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int, key: str):
     """
     Removes agent broadcast configuration keys (accepts multiple configuration keys, comma-separated).
     """
@@ -883,7 +884,7 @@ def agents_configs_broadcast_remove(api: str, user: str, password: str, ca_bundl
                       pprint.pformat(new_config_dict, sort_dicts=False))
         logger.debug("Posting output from the API:\n" +
                       pprint.pformat(r.json(), sort_dicts=False))
-        print(pprint.pformat(r.json(), sort_dicts=False))
+        print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         return True
     else:
         logger.error("Error posting data to the API: "+str(r.status_code))
@@ -891,7 +892,7 @@ def agents_configs_broadcast_remove(api: str, user: str, password: str, ca_bundl
 
 @add_options(_cmd_options)
 @siaas.command("agents-configs-broadcast-clear")
-def agents_configs_broadcast_clear(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool):
+def agents_configs_broadcast_clear(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int):
     """
     Clears all agent broadcast configuration keys.
     """
@@ -920,7 +921,7 @@ def agents_configs_broadcast_clear(api: str, user: str, password: str, ca_bundle
     if r.status_code == 200:
         logger.debug("Deletion output from the API:\n" +
             pprint.pformat(r.json(), sort_dicts=False))
-        print(pprint.pformat(r.json(), sort_dicts=False))
+        print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         return True
     else:
         logger.error("Error deleting data from the API: "+str(r.status_code))
@@ -936,7 +937,7 @@ def agents_configs_broadcast_clear(api: str, user: str, password: str, ca_bundle
 @click.option('-h', '--hide', is_flag=True, help="Hide empty entries.")
 @click.argument('agent_uid', nargs=1, required=0)
 @siaas.command("agents-history-show")
-def agents_history_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, agent_uid: str, module: str, limit: int, days: int, sort: str, older: bool, hide: bool):
+def agents_history_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int, agent_uid: str, module: str, limit: int, days: int, sort: str, older: bool, hide: bool):
     """
     Shows historical data from agents (accepts multiple agent UIDs, comma-separated).
     """
@@ -979,7 +980,7 @@ def agents_history_show(api: str, user: str, password: str, ca_bundle: str, inse
     if r.status_code == 200:
         logger.debug("All data that was read from the API:\n" +
                      pprint.pformat(r.json(), sort_dicts=False))
-        print(pprint.pformat(r.json(), sort_dicts=False))
+        print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         return True
     else:
         logger.error("Error getting data from the API: "+str(r.status_code))
@@ -991,7 +992,7 @@ def agents_history_show(api: str, user: str, password: str, ca_bundle: str, inse
 @click.option('-t', '--target-host', help="Only shows results targeting these hosts (comma-separated).")
 @click.option('-r', '--report-type', help="Type of report to generate ('all', 'vuln_only', 'exploit_only'). (Default: 'exploit_only')", default="exploit_only")
 @siaas.command("vuln-report")
-def vuln_report(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, agent: str, target_host: str, report_type: str):
+def vuln_report(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int, agent: str, target_host: str, report_type: str):
     """
     Reports scanned vulnerabilities.
     """
@@ -1033,7 +1034,7 @@ def vuln_report(api: str, user: str, password: str, ca_bundle: str, insecure: bo
 
     logger.debug("All data returned by the grabbing vuln function:\n" +
                      pprint.pformat(vuln_dict, sort_dicts=False))
-    print(pprint.pformat(vuln_dict, width=500, sort_dicts=False))
+    print(pprint.pformat(vuln_dict, sort_dicts=False, width=chars_line))
 
 if __name__ == '__main__':
     siaas(prog_name='siaas-cli')

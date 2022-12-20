@@ -6,3 +6,4 @@ export SIAAS_API_SSL_CA_BUNDLE=./ssl/siaas.crt
 export SIAAS_LOG_LEVEL=warn
 export SIAAS_API_TIMEOUT=60
 export SIAAS_DEBUG_LOGS=false
+export SIAAS_MAX_CHARS_LINE=500
