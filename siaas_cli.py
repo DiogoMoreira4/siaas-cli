@@ -19,12 +19,108 @@ _cmd_options = [
     click.option('-D', '--debug', is_flag=True, help="SIAAS debug logs. (Default: False)", envvar='SIAAS_DEBUG_LOGS')
 ]
 
+
 def add_options(options):
     def _add_options(func):
         for option in reversed(options):
             func = option(func)
         return func
     return _add_options
+
+
+def grab_vulns_from_agent_data_dict(agent_data_dict, target_host=None, report_type="exploit_only"):
+
+    if len(report_type or '') == 0:
+        report_type="exploit_only"
+
+    new_dict={}
+
+    if report_type.lower() == "all":
+        try:
+            for a in agent_data_dict.keys():
+                for b in agent_data_dict[a].keys():
+                    if b == "portscanner":
+                        for c in agent_data_dict[a][b].keys():
+                            if len(target_host or '') > 0 and c not in target_host.split(','):
+                                 continue
+                            if a not in new_dict.keys():
+                                 new_dict[a]={}
+                            if b not in new_dict[a].keys():
+                                 new_dict[a][b]={}
+                            new_dict[a][b][c]=agent_data_dict[a][b][c]
+        except Exception as e:
+           logger.error("Error generating new dict: "+str(e))
+           return False
+    else:
+        try:
+            for a in agent_data_dict.keys():
+                for b in agent_data_dict[a].keys():
+                    if b == "portscanner":
+                        for c in agent_data_dict[a][b].keys():
+                            if len(target_host or '') > 0 and c not in target_host.split(','):
+                                continue
+                            for d in agent_data_dict[a][b][c].keys():
+                                if d == "last_check":
+                                    if a not in new_dict.keys():
+                                        new_dict[a]={}
+                                    if b not in new_dict[a].keys():
+                                        new_dict[a][b]={}
+                                    if c not in new_dict[a][b].keys():
+                                        new_dict[a][b][c]={}
+                                    new_dict[a][b][c]["last_check"] = agent_data_dict[a][b][c]["last_check"]
+                                if d == "scanned_ports":
+                                    for e in agent_data_dict[a][b][c][d].keys():
+                                        for f in agent_data_dict[a][b][c][d][e].keys():
+                                            if f == "scan_results":
+                                                for g in agent_data_dict[a][b][c][d][e][f].keys():
+                                                    for h in agent_data_dict[a][b][c][d][e][f][g].keys():
+                                                        if "vulners" in h or "vulscan" in h:
+                                                            if report_type.lower() == "vuln_only":
+                                                                if a not in new_dict.keys():
+                                                                     new_dict[a]={}
+                                                                if b not in new_dict[a].keys():
+                                                                     new_dict[a][b]={}
+                                                                if c not in new_dict[a][b].keys():
+                                                                     new_dict[a][b][c]={}
+                                                                if d not in new_dict[a][b][c].keys():
+                                                                     new_dict[a][b][c][d]={}
+                                                                if e not in new_dict[a][b][c][d].keys():
+                                                                     new_dict[a][b][c][d][e]={}
+                                                                if f not in new_dict[a][b][c][d][e].keys():
+                                                                     new_dict[a][b][c][d][e][f]={}
+                                                                if g not in new_dict[a][b][c][d][e][f].keys():
+                                                                    new_dict[a][b][c][d][e][f][g]={}
+                                                                new_dict[a][b][c][d][e][f][g][h]=agent_data_dict[a][b][c][d][e][f][g][h]
+                                                            else: # exploit_only (default)
+                                                                for i in agent_data_dict[a][b][c][d][e][f][g][h].keys():
+                                                                    for j in agent_data_dict[a][b][c][d][e][f][g][h][i].keys():
+                                                                        if "siaas_exploit_tag" in agent_data_dict[a][b][c][d][e][f][g][h][i][j]:
+                                                                            if a not in new_dict.keys():
+                                                                                new_dict[a]={}
+                                                                            if b not in new_dict[a].keys():
+                                                                                new_dict[a][b]={}
+                                                                            if c not in new_dict[a][b].keys():
+                                                                                new_dict[a][b][c]={}
+                                                                            if d not in new_dict[a][b][c].keys():
+                                                                                new_dict[a][b][c][d]={}
+                                                                            if e not in new_dict[a][b][c][d].keys():
+                                                                                new_dict[a][b][c][d][e]={}
+                                                                            if f not in new_dict[a][b][c][d][e].keys():
+                                                                                new_dict[a][b][c][d][e][f]={}
+                                                                            if g not in new_dict[a][b][c][d][e][f].keys():
+                                                                                new_dict[a][b][c][d][e][f][g]={}
+                                                                            if h not in new_dict[a][b][c][d][e][f][g].keys():
+                                                                                new_dict[a][b][c][d][e][f][g][h]={}
+                                                                            if i not in new_dict[a][b][c][d][e][f][g][h].keys():
+                                                                                new_dict[a][b][c][d][e][f][g][h][i]={}
+                                                                            new_dict[a][b][c][d][e][f][g][h][i][j]=agent_data_dict[a][b][c][d][e][f][g][h][i][j]
+
+        except Exception as e:
+            logger.error("Error generating new dict: "+str(e))
+            return False
+
+    return new_dict
+
 
 @click.group()
 @click.version_option(version=SIAAS_VERSION)
@@ -889,6 +985,55 @@ def agents_history_show(api: str, user: str, password: str, ca_bundle: str, inse
         logger.error("Error getting data from the API: "+str(r.status_code))
         return False
 
+
+@add_options(_cmd_options)
+@click.option('-a', '--agent', help="Only shows results scanned by these agent(s) (comma-separated).")
+@click.option('-t', '--target-host', help="Only shows results targeting these host(s) (comma-separated).")
+@click.option('-r', '--report-type', help="Type of report to generate ('all', 'vuln_only', 'exploit_only'). (Default: 'exploit_only')", default="exploit_only")
+@siaas.command("vuln-report")
+def vuln_report(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, agent: str, target_host: str, report_type: str):
+    """
+    Reports scanned vulnerabilities.
+    """
+    if debug:
+       log_level=logging.DEBUG
+    else:
+       log_level=logging.WARN
+    logging.basicConfig(level=log_level)
+    urllib3.disable_warnings()
+    if insecure==True:
+       logger.warning("SSL verification is off! This might have security implications while connecting to the API.")
+       verify=False
+    else:
+       if len(ca_bundle or '')>0:
+         verify=ca_bundle
+       else:
+         verify=True
+    try:
+        if len(agent or '') > 0:
+           request_uri=api+"/siaas-server/agents/data/"+agent+"?module=portscanner"
+        else:
+           request_uri=api+"/siaas-server/agents/data?module=portscanner"
+        r = requests.get(request_uri, timeout=timeout, verify=verify, allow_redirects=True, auth=(user,password))
+    except Exception as e:
+        logger.error("Error while performing a GET request to the API: "+str(e))
+        return False
+    if r.status_code == 200:
+        logger.debug("All data that was read from the API:\n" +
+                     pprint.pformat(r.json(), sort_dicts=False))
+    else:
+        logger.error("Error getting data from the API: "+str(r.status_code))
+        return False
+    if len(target_host or '') == 0:
+        target_host=None
+    vuln_dict=grab_vulns_from_agent_data_dict(r.json()["output"], target_host=target_host, report_type=report_type)
+    if vuln_dict == False:
+        logger.error("There was an error getting vulnerability dict.")
+        return False
+
+    logger.debug("All data returned by the grabbing vuln function:\n" +
+                     pprint.pformat(vuln_dict, sort_dicts=False))
+    print(pprint.pformat(vuln_dict, width=500, sort_dicts=False))
 
 if __name__ == '__main__':
     siaas(prog_name='siaas-cli')
