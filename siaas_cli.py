@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 SIAAS_VERSION = "1.0.0"
 
 _cmd_options = [
-    click.option('-A', '--api', help="SIAAS API URI.", envvar='SIAAS_API_URI'),
+    click.option('-A', '--api', help="SIAAS API URI. (Default: https://127.0.0.1/api)", envvar='SIAAS_API_URI', default="https://127.0.0.1/api"),
     click.option('-U', '--user', help="SIAAS API user.", envvar='SIAAS_API_USER'),
     click.option('-P', '--password', help="SIAAS API password.", envvar='SIAAS_API_PWD'),
     click.option('-C', '--ca-bundle', help="SIAAS SSL CA bundle path.", envvar='SIAAS_API_SSL_CA_BUNDLE'),
