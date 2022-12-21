@@ -51,7 +51,7 @@ def grab_vulns_from_agent_data_dict(agent_data_dict, target_host=None, report_ty
                             new_dict[a][b][c]=agent_data_dict[a][b][c]
         except Exception as e:
            logger.error("Error generating new dict: "+str(e))
-           return False
+           exit(1)
     else:
         try:
             for a in agent_data_dict.keys():
@@ -118,7 +118,7 @@ def grab_vulns_from_agent_data_dict(agent_data_dict, target_host=None, report_ty
 
         except Exception as e:
             logger.error("Error generating new dict: "+str(e))
-            return False
+            exit(1)
 
     return new_dict
 
@@ -139,6 +139,9 @@ def api_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool,
     else:
        log_level=logging.WARN
     logging.basicConfig(level=log_level)
+    if chars_line < 1:
+       logger.critical("Number of characters per line can not be less than 1.")
+       exit(1)
     urllib3.disable_warnings()
     if insecure==True:
        logger.warning("SSL verification is off! This might have security implications while connecting to the API.")
@@ -152,15 +155,15 @@ def api_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool,
         r = requests.get(api, timeout=timeout, verify=verify, allow_redirects=True, auth=(user,password))
     except Exception as e:
         logger.error("Error while performing a GET request to the API: "+str(e))
-        return False
+        exit(1)
     if r.status_code == 200:
         logger.debug("All data that was read from the API:\n" +
                      pprint.pformat(r.json(), sort_dicts=False))
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
-        return True
+        exit(0)
     else:
         logger.error("Error getting data from the API: "+str(r.status_code))
-        return False
+        exit(1)
 
 
 @add_options(_cmd_options)
@@ -175,6 +178,9 @@ def server_show(api: str, user: str, password: str, ca_bundle: str, insecure: bo
     else:
        log_level=logging.WARN
     logging.basicConfig(level=log_level)
+    if chars_line < 1:
+       logger.critical("Number of characters per line can not be less than 1.")
+       exit(1)
     urllib3.disable_warnings()
     if insecure==True:
        logger.warning("SSL verification is off! This might have security implications while connecting to the API.")
@@ -191,15 +197,15 @@ def server_show(api: str, user: str, password: str, ca_bundle: str, insecure: bo
         r = requests.get(request_uri, timeout=timeout, verify=verify, allow_redirects=True, auth=(user,password))
     except Exception as e:
         logger.error("Error while performing a GET request to the API: "+str(e))
-        return False
+        exit(1)
     if r.status_code == 200:
         logger.debug("All data that was read from the API:\n" +
                      pprint.pformat(r.json(), sort_dicts=False))
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
-        return True
+        exit(0)
     else:
         logger.error("Error getting data from the API: "+str(r.status_code))
-        return False
+        exit(1)
 
 
 @add_options(_cmd_options)
@@ -213,6 +219,9 @@ def server_configs_show(api: str, user: str, password: str, ca_bundle: str, inse
     else:
        log_level=logging.WARN
     logging.basicConfig(level=log_level)
+    if chars_line < 1:
+       logger.critical("Number of characters per line can not be less than 1.")
+       exit(1)
     urllib3.disable_warnings()
     if insecure==True:
        logger.warning("SSL verification is off! This might have security implications while connecting to the API.")
@@ -226,15 +235,15 @@ def server_configs_show(api: str, user: str, password: str, ca_bundle: str, inse
         r = requests.get(api+"/siaas-server/configs", timeout=timeout, verify=verify, allow_redirects=True, auth=(user,password))
     except Exception as e:
         logger.error("Error while performing a GET request to the API: "+str(e))
-        return False
+        exit(1)
     if r.status_code == 200:
         logger.debug("All data that was read from the API:\n" +
                      pprint.pformat(r.json(), sort_dicts=False))
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
-        return True
+        exit(0)
     else:
         logger.error("Error getting data from the API: "+str(r.status_code))
-        return False
+        exit(1)
 
 
 @add_options(_cmd_options)
@@ -249,6 +258,9 @@ def server_configs_add_or_update(api: str, user: str, password: str, ca_bundle: 
     else:
        log_level=logging.WARN
     logging.basicConfig(level=log_level)
+    if chars_line < 1:
+       logger.critical("Number of characters per line can not be less than 1.")
+       exit(1)
     urllib3.disable_warnings()
     if insecure==True:
        logger.warning("SSL verification is off! This might have security implications while connecting to the API.")
@@ -264,13 +276,13 @@ def server_configs_add_or_update(api: str, user: str, password: str, ca_bundle: 
         r = requests.get(request_uri, timeout=timeout, verify=verify, allow_redirects=True, auth=(user,password))
     except Exception as e:
         logger.error("Error while performing a GET request to the API: "+str(e))
-        return False
+        exit(1)
     if r.status_code == 200:
         logger.debug("All data that was read from the API:\n" +
                pprint.pformat(r.json(), sort_dicts=False))
     else:
         logger.error("Error getting data from the API: "+str(r.status_code))
-        return False
+        exit(1)
     current_config_dict = {}
     delta_config_dict = {}
     current_config_dict = r.json()["output"]
@@ -289,17 +301,17 @@ def server_configs_add_or_update(api: str, user: str, password: str, ca_bundle: 
     except Exception as e:
         logger.error(
             "Error while performing a POST request to the API: "+str(e))
-        return False
+        exit(1)
     if r.status_code == 200:
         logger.debug("All data that was written to the API:\n" +
                       pprint.pformat(new_config_dict, sort_dicts=False))
         logger.debug("Posting output from the API:\n" +
                       pprint.pformat(r.json(), sort_dicts=False))
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
-        return True
+        exit(0)
     else:
         logger.error("Error posting data to the API: "+str(r.status_code))
-        return False
+        exit(1)
 
 
 @add_options(_cmd_options)
@@ -314,6 +326,9 @@ def server_configs_remove(api: str, user: str, password: str, ca_bundle: str, in
     else:
        log_level=logging.WARN
     logging.basicConfig(level=log_level)
+    if chars_line < 1:
+       logger.critical("Number of characters per line can not be less than 1.")
+       exit(1)
     urllib3.disable_warnings()
     if insecure==True:
        logger.warning("SSL verification is off! This might have security implications while connecting to the API.")
@@ -328,13 +343,13 @@ def server_configs_remove(api: str, user: str, password: str, ca_bundle: str, in
         r = requests.get(request_uri, timeout=timeout, verify=verify, allow_redirects=True, auth=(user,password))
     except Exception as e:
         logger.error("Error while performing a GET request to the API: "+str(e))
-        return False
+        exit(1)
     if r.status_code == 200:
         logger.debug("All data that was read from the API:\n" +
                pprint.pformat(r.json(), sort_dicts=False))
     else:
         logger.error("Error getting data from the API: "+str(r.status_code))
-        return False
+        exit(1)
     current_config_dict = {}
     current_config_dict = r.json()["output"]
     new_config_dict=dict(current_config_dict)
@@ -347,17 +362,17 @@ def server_configs_remove(api: str, user: str, password: str, ca_bundle: str, in
     except Exception as e:
         logger.error(
             "Error while performing a POST request to the API: "+str(e))
-        return False
+        exit(1)
     if r.status_code == 200:
         logger.debug("All data that was written to the API:\n" +
                       pprint.pformat(new_config_dict, sort_dicts=False))
         logger.debug("Posting output from the API:\n" +
                       pprint.pformat(r.json(), sort_dicts=False))
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
-        return True
+        exit(0)
     else:
         logger.error("Error posting data to the API: "+str(r.status_code))
-        return False
+        exit(1)
 
 
 @add_options(_cmd_options)
@@ -371,6 +386,9 @@ def server_configs_clear(api: str, user: str, password: str, ca_bundle: str, ins
     else:
        log_level=logging.WARN
     logging.basicConfig(level=log_level)
+    if chars_line < 1:
+       logger.critical("Number of characters per line can not be less than 1.")
+       exit(1)
     urllib3.disable_warnings()
     if insecure==True:
        logger.warning("SSL verification is off! This might have security implications while connecting to the API.")
@@ -386,15 +404,15 @@ def server_configs_clear(api: str, user: str, password: str, ca_bundle: str, ins
     except Exception as e:
         logger.error(
             "Error while performing a DELETE request to the API: "+str(e))
-        return False
+        exit(1)
     if r.status_code == 200:
         logger.debug("Deletion output from the API:\n" +
             pprint.pformat(r.json(), sort_dicts=False))
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
-        return True
+        exit(0)
     else:
         logger.error("Error deleting data from the API: "+str(r.status_code))
-        return False
+        exit(1)
 
 
 @add_options(_cmd_options)
@@ -409,6 +427,9 @@ def agents_show(api: str, user: str, password: str, ca_bundle: str, insecure: bo
     else:
        log_level=logging.WARN
     logging.basicConfig(level=log_level)
+    if chars_line < 1:
+       logger.critical("Number of characters per line can not be less than 1.")
+       exit(1)
     urllib3.disable_warnings()
     if insecure==True:
        logger.warning("SSL verification is off! This might have security implications while connecting to the API.")
@@ -425,15 +446,15 @@ def agents_show(api: str, user: str, password: str, ca_bundle: str, insecure: bo
 
     except Exception as e:
         logger.error("Error while performing a GET request to the API: "+str(e))
-        return False
+        exit(1)
     if r.status_code == 200:
         logger.debug("All data that was read from the API:\n" +
                      pprint.pformat(r.json(), sort_dicts=False))
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
-        return True
+        exit(0)
     else:
         logger.error("Error getting data from the API: "+str(r.status_code))
-        return False
+        exit(1)
 
 
 @add_options(_cmd_options)
@@ -449,6 +470,9 @@ def agents_data_show(api: str, user: str, password: str, ca_bundle: str, insecur
     else:
        log_level=logging.WARN
     logging.basicConfig(level=log_level)
+    if chars_line < 1:
+       logger.critical("Number of characters per line can not be less than 1.")
+       exit(1)
     urllib3.disable_warnings()
     if insecure==True:
        logger.warning("SSL verification is off! This might have security implications while connecting to the API.")
@@ -468,15 +492,15 @@ def agents_data_show(api: str, user: str, password: str, ca_bundle: str, insecur
         r = requests.get(request_uri, timeout=timeout, verify=verify, allow_redirects=True, auth=(user,password))
     except Exception as e:
         logger.error("Error while performing a GET request to the API: "+str(e))
-        return False
+        exit(1)
     if r.status_code == 200:
         logger.debug("All data that was read from the API:\n" +
                      pprint.pformat(r.json(), sort_dicts=False))
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
-        return True
+        exit(0)
     else:
         logger.error("Error getting data from the API: "+str(r.status_code))
-        return False
+        exit(1)
 
 
 @add_options(_cmd_options)
@@ -492,6 +516,9 @@ def agents_data_delete(api: str, user: str, password: str, ca_bundle: str, insec
     else:
        log_level=logging.WARN
     logging.basicConfig(level=log_level)
+    if chars_line < 1:
+       logger.critical("Number of characters per line can not be less than 1.")
+       exit(1)
     urllib3.disable_warnings()
     if insecure==True:
        logger.warning("SSL verification is off! This might have security implications while connecting to the API.")
@@ -508,15 +535,15 @@ def agents_data_delete(api: str, user: str, password: str, ca_bundle: str, insec
     except Exception as e:
         logger.error(
             "Error while performing a DELETE request to the API: "+str(e))
-        return False
+        exit(1)
     if r.status_code == 200:
         logger.debug("Deletion output from the API:\n" +
             pprint.pformat(r.json(), sort_dicts=False))
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
-        return True
+        exit(0)
     else:
         logger.error("Error deleting data from the API: "+str(r.status_code))
-        return False
+        exit(1)
 
 
 @add_options(_cmd_options)
@@ -532,6 +559,9 @@ def agents_configs_show(api: str, user: str, password: str, ca_bundle: str, inse
     else:
        log_level=logging.WARN
     logging.basicConfig(level=log_level)
+    if chars_line < 1:
+       logger.critical("Number of characters per line can not be less than 1.")
+       exit(1)
     urllib3.disable_warnings()
     if insecure==True:
        logger.warning("SSL verification is off! This might have security implications while connecting to the API.")
@@ -553,15 +583,15 @@ def agents_configs_show(api: str, user: str, password: str, ca_bundle: str, inse
         r = requests.get(request_uri, timeout=timeout, verify=verify, allow_redirects=True, auth=(user,password))
     except Exception as e:
         logger.error("Error while performing a GET request to the API: "+str(e))
-        return False
+        exit(1)
     if r.status_code == 200:
         logger.debug("All data that was read from the API:\n" +
                      pprint.pformat(r.json(), sort_dicts=False))
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
-        return True
+        exit(0)
     else:
         logger.error("Error getting data from the API: "+str(r.status_code))
-        return False
+        exit(1)
 
 
 @add_options(_cmd_options)
@@ -577,6 +607,9 @@ def agents_configs_add_or_update(api: str, user: str, password: str, ca_bundle: 
     else:
        log_level=logging.WARN
     logging.basicConfig(level=log_level)
+    if chars_line < 1:
+       logger.critical("Number of characters per line can not be less than 1.")
+       exit(1)
     urllib3.disable_warnings()
     if insecure==True:
        logger.warning("SSL verification is off! This might have security implications while connecting to the API.")
@@ -592,14 +625,14 @@ def agents_configs_add_or_update(api: str, user: str, password: str, ca_bundle: 
         r = requests.get(request_uri, timeout=timeout, verify=verify, allow_redirects=True, auth=(user,password))
     except Exception as e:
         logger.error("Error while performing a GET request to the API: "+str(e))
-        return False
+        exit(1)
     if r.status_code == 200:
         logger.debug("All data that was read from the API:\n" +
                pprint.pformat(r.json(), sort_dicts=False))
     else:
         logger.error("Error getting data from the API: "+str(r.status_code))
-        return False
-    result=True
+        exit(1)
+    result=0
     for a in agent_uid.split(','):
         current_config_dict = {}
         delta_config_dict = {}
@@ -620,15 +653,15 @@ def agents_configs_add_or_update(api: str, user: str, password: str, ca_bundle: 
         except Exception as e:
             logger.error(
                 "Error while performing a POST request to the server API: "+str(e))
-            result=False
+            result=1
         if r2.status_code == 200:
             logger.debug("All data that was written to the server API:\n" +
                           pprint.pformat(new_config_dict, sort_dicts=False))
             print(pprint.pformat(r2.json(), sort_dicts=False, width=chars_line))
         else:
             logger.error("Error posting data to the server API: "+str(r2.status_code))
-            result=False
-    return result
+            result=1
+    exit(result)
 
 
 @add_options(_cmd_options)
@@ -644,6 +677,9 @@ def agents_configs_remove(api: str, user: str, password: str, ca_bundle: str, in
     else:
        log_level=logging.WARN
     logging.basicConfig(level=log_level)
+    if chars_line < 1:
+       logger.critical("Number of characters per line can not be less than 1.")
+       exit(1)
     urllib3.disable_warnings()
     if insecure==True:
        logger.warning("SSL verification is off! This might have security implications while connecting to the API.")
@@ -658,14 +694,14 @@ def agents_configs_remove(api: str, user: str, password: str, ca_bundle: str, in
         r = requests.get(request_uri, timeout=timeout, verify=verify, allow_redirects=True, auth=(user,password))
     except Exception as e:
         logger.error("Error while performing a GET request to the API: "+str(e))
-        return False
+        exit(1)
     if r.status_code == 200:
         logger.debug("All data that was read from the API:\n" +
                pprint.pformat(r.json(), sort_dicts=False))
     else:
         logger.error("Error getting data from the API: "+str(r.status_code))
-        return False
-    result=True
+        exit(1)
+    result=0
     for a in agent_uid.split(','):
         current_config_dict = {}
         if a in r.json()["output"].keys():
@@ -680,15 +716,15 @@ def agents_configs_remove(api: str, user: str, password: str, ca_bundle: str, in
         except Exception as e:
             logger.error(
                 "Error while performing a POST request to the server API: "+str(e))
-            result=False
+            result=1
         if r2.status_code == 200:
             logger.debug("All data that was written to the server API:\n" +
                           pprint.pformat(new_config_dict, sort_dicts=False))
             print(pprint.pformat(r2.json(), sort_dicts=False, width=chars_line))
         else:
             logger.error("Error posting data to the server API: "+str(r2.status_code))
-            result=False
-    return result
+            result=1
+    exit(result)
 
 @add_options(_cmd_options)
 @click.argument('agent_uid', nargs=1, required=1)
@@ -702,6 +738,9 @@ def agents_configs_clear(api: str, user: str, password: str, ca_bundle: str, ins
     else:
        log_level=logging.WARN
     logging.basicConfig(level=log_level)
+    if chars_line < 1:
+       logger.critical("Number of characters per line can not be less than 1.")
+       exit(1)
     urllib3.disable_warnings()
     if insecure==True:
        logger.warning("SSL verification is off! This might have security implications while connecting to the API.")
@@ -717,15 +756,15 @@ def agents_configs_clear(api: str, user: str, password: str, ca_bundle: str, ins
     except Exception as e:
         logger.error(
             "Error while performing a request to the server API: "+str(e))
-        return False
+        exit(1)
     if r.status_code == 200:
         logger.debug("Output from the API:\n" +
             pprint.pformat(r.json(), sort_dicts=False))
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
-        return True
+        exit(0)
     else:
         logger.error("Error interacting with the server API: "+str(r.status_code))
-        return False
+        exit(1)
 
 @add_options(_cmd_options)
 @siaas.command("agents-configs-broadcast-show")
@@ -738,6 +777,9 @@ def agents_configs_broadcast_show(api: str, user: str, password: str, ca_bundle:
     else:
        log_level=logging.WARN
     logging.basicConfig(level=log_level)
+    if chars_line < 1:
+       logger.critical("Number of characters per line can not be less than 1.")
+       exit(1)
     urllib3.disable_warnings()
     if insecure==True:
        logger.warning("SSL verification is off! This might have security implications while connecting to the API.")
@@ -753,15 +795,15 @@ def agents_configs_broadcast_show(api: str, user: str, password: str, ca_bundle:
         r = requests.get(request_uri, timeout=timeout, verify=verify, allow_redirects=True, auth=(user,password))
     except Exception as e:
         logger.error("Error while performing a GET request to the API: "+str(e))
-        return False
+        exit(1)
     if r.status_code == 200:
         logger.debug("All data that was read from the API:\n" +
                      pprint.pformat(r.json(), sort_dicts=False))
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
-        return True
+        exit(0)
     else:
         logger.error("Error getting data from the API: "+str(r.status_code))
-        return False
+        exit(1)
 
 
 @add_options(_cmd_options)
@@ -776,6 +818,9 @@ def agents_configs_broadcast_add_or_update(api: str, user: str, password: str, c
     else:
        log_level=logging.WARN
     logging.basicConfig(level=log_level)
+    if chars_line < 1:
+       logger.critical("Number of characters per line can not be less than 1.")
+       exit(1)
     urllib3.disable_warnings()
     if insecure==True:
        logger.warning("SSL verification is off! This might have security implications while connecting to the API.")
@@ -792,13 +837,13 @@ def agents_configs_broadcast_add_or_update(api: str, user: str, password: str, c
         r = requests.get(request_uri, timeout=timeout, verify=verify, allow_redirects=True, auth=(user,password))
     except Exception as e:
         logger.error("Error while performing a GET request to the API: "+str(e))
-        return False
+        exit(1)
     if r.status_code == 200:
         logger.debug("All data that was read from the API:\n" +
                pprint.pformat(r.json(), sort_dicts=False))
     else:
         logger.error("Error getting data from the API: "+str(r.status_code))
-        return False
+        exit(1)
     current_config_dict = {}
     delta_config_dict = {}
     if agent_uid in r.json()["output"].keys():
@@ -818,17 +863,17 @@ def agents_configs_broadcast_add_or_update(api: str, user: str, password: str, c
     except Exception as e:
         logger.error(
             "Error while performing a POST request to the API: "+str(e))
-        return False
+        exit(1)
     if r.status_code == 200:
         logger.debug("All data that was written to the API:\n" +
                       pprint.pformat(new_config_dict, sort_dicts=False))
         logger.debug("Posting output from the API:\n" +
                       pprint.pformat(r.json(), sort_dicts=False))
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
-        return True
+        exit(0)
     else:
         logger.error("Error posting data to the API: "+str(r.status_code))
-        return False
+        exit(1)
 
 
 @add_options(_cmd_options)
@@ -843,6 +888,9 @@ def agents_configs_broadcast_remove(api: str, user: str, password: str, ca_bundl
     else:
        log_level=logging.WARN
     logging.basicConfig(level=log_level)
+    if chars_line < 1:
+       logger.critical("Number of characters per line can not be less than 1.")
+       exit(1)
     urllib3.disable_warnings()
     if insecure==True:
        logger.warning("SSL verification is off! This might have security implications while connecting to the API.")
@@ -858,13 +906,13 @@ def agents_configs_broadcast_remove(api: str, user: str, password: str, ca_bundl
         r = requests.get(request_uri, timeout=timeout, verify=verify, allow_redirects=True, auth=(user,password))
     except Exception as e:
         logger.error("Error while performing a GET request to the API: "+str(e))
-        return False
+        exit(1)
     if r.status_code == 200:
         logger.debug("All data that was read from the API:\n" +
                pprint.pformat(r.json(), sort_dicts=False))
     else:
         logger.error("Error getting data from the API: "+str(r.status_code))
-        return False
+        exit(1)
     current_config_dict = {}
     if agent_uid in r.json()["output"].keys():
         current_config_dict = r.json()["output"][agent_uid]
@@ -878,17 +926,17 @@ def agents_configs_broadcast_remove(api: str, user: str, password: str, ca_bundl
     except Exception as e:
         logger.error(
             "Error while performing a POST request to the API: "+str(e))
-        return False
+        exit(1)
     if r.status_code == 200:
         logger.debug("All data that was written to the API:\n" +
                       pprint.pformat(new_config_dict, sort_dicts=False))
         logger.debug("Posting output from the API:\n" +
                       pprint.pformat(r.json(), sort_dicts=False))
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
-        return True
+        exit(0)
     else:
         logger.error("Error posting data to the API: "+str(r.status_code))
-        return False
+        exit(1)
 
 @add_options(_cmd_options)
 @siaas.command("agents-configs-broadcast-clear")
@@ -901,6 +949,9 @@ def agents_configs_broadcast_clear(api: str, user: str, password: str, ca_bundle
     else:
        log_level=logging.WARN
     logging.basicConfig(level=log_level)
+    if chars_line < 1:
+       logger.critical("Number of characters per line can not be less than 1.")
+       exit(1)
     urllib3.disable_warnings()
     if insecure==True:
        logger.warning("SSL verification is off! This might have security implications while connecting to the API.")
@@ -917,15 +968,15 @@ def agents_configs_broadcast_clear(api: str, user: str, password: str, ca_bundle
     except Exception as e:
         logger.error(
             "Error while performing a DELETE request to the API: "+str(e))
-        return False
+        exit(1)
     if r.status_code == 200:
         logger.debug("Deletion output from the API:\n" +
             pprint.pformat(r.json(), sort_dicts=False))
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
-        return True
+        exit(0)
     else:
         logger.error("Error deleting data from the API: "+str(r.status_code))
-        return False
+        exit(1)
 
 
 @add_options(_cmd_options)
@@ -946,6 +997,9 @@ def agents_history_show(api: str, user: str, password: str, ca_bundle: str, inse
     else:
        log_level=logging.WARN
     logging.basicConfig(level=log_level)
+    if chars_line < 1:
+       logger.critical("Number of characters per line can not be less than 1.")
+       exit(1)
     urllib3.disable_warnings()
     if insecure==True:
        logger.warning("SSL verification is off! This might have security implications while connecting to the API.")
@@ -976,15 +1030,15 @@ def agents_history_show(api: str, user: str, password: str, ca_bundle: str, inse
         r = requests.get(request_uri, timeout=timeout, verify=verify, allow_redirects=True, auth=(user,password))
     except Exception as e:
         logger.error("Error while performing a GET request to the API: "+str(e))
-        return False
+        exit(1)
     if r.status_code == 200:
         logger.debug("All data that was read from the API:\n" +
                      pprint.pformat(r.json(), sort_dicts=False))
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
-        return True
+        exit(0)
     else:
         logger.error("Error getting data from the API: "+str(r.status_code))
-        return False
+        exit(1)
 
 
 @add_options(_cmd_options)
@@ -1001,6 +1055,9 @@ def vuln_report(api: str, user: str, password: str, ca_bundle: str, insecure: bo
     else:
        log_level=logging.WARN
     logging.basicConfig(level=log_level)
+    if chars_line < 1:
+       logger.critical("Number of characters per line can not be less than 1.")
+       exit(1)
     urllib3.disable_warnings()
     if insecure==True:
        logger.warning("SSL verification is off! This might have security implications while connecting to the API.")
@@ -1018,23 +1075,24 @@ def vuln_report(api: str, user: str, password: str, ca_bundle: str, insecure: bo
         r = requests.get(request_uri, timeout=timeout, verify=verify, allow_redirects=True, auth=(user,password))
     except Exception as e:
         logger.error("Error while performing a GET request to the API: "+str(e))
-        return False
+        exit(1)
     if r.status_code == 200:
         logger.debug("All data that was read from the API:\n" +
                      pprint.pformat(r.json(), sort_dicts=False))
     else:
         logger.error("Error getting data from the API: "+str(r.status_code))
-        return False
+        exit(1)
     if len(target_host or '') == 0:
         target_host=None
     vuln_dict=grab_vulns_from_agent_data_dict(r.json()["output"], target_host=target_host, report_type=report_type)
     if vuln_dict == False:
         logger.error("There was an error getting vulnerability dict.")
-        return False
+        exit(1)
 
     logger.debug("All data returned by the grabbing vuln function:\n" +
                      pprint.pformat(vuln_dict, sort_dicts=False))
     print(pprint.pformat(vuln_dict, sort_dicts=False, width=chars_line))
+    exit(0)
 
 if __name__ == '__main__':
     siaas(prog_name='siaas-cli')
