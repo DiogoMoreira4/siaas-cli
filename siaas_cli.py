@@ -981,7 +981,7 @@ def agents_configs_broadcast_clear(api: str, user: str, password: str, ca_bundle
 
 @add_options(_cmd_options)
 @click.option('-m', '--module', help="Only show these modules (comma-separated).")
-@click.option('-l', '--limit', help="Max number of records to show (less than 1 means no limit). (Default: 100)", default=100)
+@click.option('-l', '--limit', help="Max number of records to show (less than 1 means no limit). (Default: 10)", default=10)
 @click.option('-d', '--days', help="Max number of past days to show. (Default: 2)", default=2)
 @click.option('-s', '--sort', help="Use 'agent' or 'date' to sort. (Default: 'date')", default="date")
 @click.option('-o', '--older', is_flag=True, help="Show older records first.")
