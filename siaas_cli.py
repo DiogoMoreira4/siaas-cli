@@ -504,7 +504,7 @@ def agents_data_show(api: str, user: str, password: str, ca_bundle: str, insecur
 
 
 @add_options(_cmd_options)
-@click.option('-d', '--days', help="Number of days to keep. (Default: 15)", default=15)
+@click.option('-d', '--days', help="Number of past days to keep. (Default: 15)", default=15)
 @click.argument('agent_uid', nargs=1, required=1)
 @siaas.command("agents-data-delete")
 def agents_data_delete(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int, agent_uid: str, days: int):
@@ -981,8 +981,8 @@ def agents_configs_broadcast_clear(api: str, user: str, password: str, ca_bundle
 
 @add_options(_cmd_options)
 @click.option('-m', '--module', help="Only show these modules (comma-separated).")
-@click.option('-l', '--limit', help="Max number of records to show. (0 means no limit). (Default: 100)", default=100)
-@click.option('-d', '--days', help="Max number of days to show. (Default: 2)", default=2)
+@click.option('-l', '--limit', help="Max number of records to show (less than 1 means no limit). (Default: 100)", default=100)
+@click.option('-d', '--days', help="Max number of past days to show. (Default: 2)", default=2)
 @click.option('-s', '--sort', help="Use 'agent' or 'date' to sort. (Default: 'date')", default="date")
 @click.option('-o', '--older', is_flag=True, help="Show older records first.")
 @click.option('-h', '--hide', is_flag=True, help="Hide empty entries.")
@@ -1010,6 +1010,8 @@ def agents_history_show(api: str, user: str, password: str, ca_bundle: str, inse
        else:
          verify=True
     try:
+        if limit < 1:
+           logger.warning("No limit is set. It might take a while to provide some output ...")
         if len(agent_uid or '') > 0:
            request_uri=api+"/siaas-server/agents/history/"+agent_uid
         else:
