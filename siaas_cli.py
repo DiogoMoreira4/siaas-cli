@@ -1,3 +1,7 @@
+# Intelligent System for Automation of Security Audits (SIAAS)
+# Command Line Interface
+# By João Pedro Seara, 2023
+
 import click
 import requests
 import urllib3
