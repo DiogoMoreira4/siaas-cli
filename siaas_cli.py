@@ -144,7 +144,7 @@ def api_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool,
        exit(1)
     urllib3.disable_warnings()
     if insecure==True:
-       logger.warning("SSL verification is off! This might have security implications while connecting to the API.")
+       logger.warning("SSL verification is off! The validity of the CA will not be verified.")
        verify=False
     else:
        if len(ca_bundle or '')>0:
@@ -183,7 +183,7 @@ def server_show(api: str, user: str, password: str, ca_bundle: str, insecure: bo
        exit(1)
     urllib3.disable_warnings()
     if insecure==True:
-       logger.warning("SSL verification is off! This might have security implications while connecting to the API.")
+       logger.warning("SSL verification is off! The validity of the CA will not be verified.")
        verify=False
     else:
        if len(ca_bundle or '')>0:
@@ -224,7 +224,7 @@ def server_configs_show(api: str, user: str, password: str, ca_bundle: str, inse
        exit(1)
     urllib3.disable_warnings()
     if insecure==True:
-       logger.warning("SSL verification is off! This might have security implications while connecting to the API.")
+       logger.warning("SSL verification is off! The validity of the CA will not be verified.")
        verify=False
     else:
        if len(ca_bundle or '')>0:
@@ -263,7 +263,7 @@ def server_configs_add_or_update(api: str, user: str, password: str, ca_bundle: 
        exit(1)
     urllib3.disable_warnings()
     if insecure==True:
-       logger.warning("SSL verification is off! This might have security implications while connecting to the API.")
+       logger.warning("SSL verification is off! The validity of the CA will not be verified.")
        verify=False
     else:
        if len(ca_bundle or '')>0:
@@ -331,7 +331,7 @@ def server_configs_remove(api: str, user: str, password: str, ca_bundle: str, in
        exit(1)
     urllib3.disable_warnings()
     if insecure==True:
-       logger.warning("SSL verification is off! This might have security implications while connecting to the API.")
+       logger.warning("SSL verification is off! The validity of the CA will not be verified.")
        verify=False
     else:
        if len(ca_bundle or '')>0:
@@ -391,7 +391,7 @@ def server_configs_clear(api: str, user: str, password: str, ca_bundle: str, ins
        exit(1)
     urllib3.disable_warnings()
     if insecure==True:
-       logger.warning("SSL verification is off! This might have security implications while connecting to the API.")
+       logger.warning("SSL verification is off! The validity of the CA will not be verified.")
        verify=False
     else:
        if len(ca_bundle or '')>0:
@@ -432,7 +432,7 @@ def agents_show(api: str, user: str, password: str, ca_bundle: str, insecure: bo
        exit(1)
     urllib3.disable_warnings()
     if insecure==True:
-       logger.warning("SSL verification is off! This might have security implications while connecting to the API.")
+       logger.warning("SSL verification is off! The validity of the CA will not be verified.")
        verify=False
     else:
        if len(ca_bundle or '')>0:
@@ -475,7 +475,7 @@ def agents_data_show(api: str, user: str, password: str, ca_bundle: str, insecur
        exit(1)
     urllib3.disable_warnings()
     if insecure==True:
-       logger.warning("SSL verification is off! This might have security implications while connecting to the API.")
+       logger.warning("SSL verification is off! The validity of the CA will not be verified.")
        verify=False
     else:
        if len(ca_bundle or '')>0:
@@ -521,7 +521,7 @@ def agents_data_delete(api: str, user: str, password: str, ca_bundle: str, insec
        exit(1)
     urllib3.disable_warnings()
     if insecure==True:
-       logger.warning("SSL verification is off! This might have security implications while connecting to the API.")
+       logger.warning("SSL verification is off! The validity of the CA will not be verified.")
        verify=False
     else:
        if len(ca_bundle or '')>0:
@@ -564,7 +564,7 @@ def agents_configs_show(api: str, user: str, password: str, ca_bundle: str, inse
        exit(1)
     urllib3.disable_warnings()
     if insecure==True:
-       logger.warning("SSL verification is off! This might have security implications while connecting to the API.")
+       logger.warning("SSL verification is off! The validity of the CA will not be verified.")
        verify=False
     else:
        if len(ca_bundle or '')>0:
@@ -612,7 +612,7 @@ def agents_configs_add_or_update(api: str, user: str, password: str, ca_bundle: 
        exit(1)
     urllib3.disable_warnings()
     if insecure==True:
-       logger.warning("SSL verification is off! This might have security implications while connecting to the API.")
+       logger.warning("SSL verification is off! The validity of the CA will not be verified.")
        verify=False
     else:
        if len(ca_bundle or '')>0:
@@ -682,7 +682,7 @@ def agents_configs_remove(api: str, user: str, password: str, ca_bundle: str, in
        exit(1)
     urllib3.disable_warnings()
     if insecure==True:
-       logger.warning("SSL verification is off! This might have security implications while connecting to the API.")
+       logger.warning("SSL verification is off! The validity of the CA will not be verified.")
        verify=False
     else:
        if len(ca_bundle or '')>0:
@@ -743,7 +743,7 @@ def agents_configs_clear(api: str, user: str, password: str, ca_bundle: str, ins
        exit(1)
     urllib3.disable_warnings()
     if insecure==True:
-       logger.warning("SSL verification is off! This might have security implications while connecting to the API.")
+       logger.warning("SSL verification is off! The validity of the CA will not be verified.")
        verify=False
     else:
        if len(ca_bundle or '')>0:
@@ -782,7 +782,7 @@ def agents_configs_broadcast_show(api: str, user: str, password: str, ca_bundle:
        exit(1)
     urllib3.disable_warnings()
     if insecure==True:
-       logger.warning("SSL verification is off! This might have security implications while connecting to the API.")
+       logger.warning("SSL verification is off! The validity of the CA will not be verified.")
        verify=False
     else:
        if len(ca_bundle or '')>0:
@@ -823,7 +823,7 @@ def agents_configs_broadcast_add_or_update(api: str, user: str, password: str, c
        exit(1)
     urllib3.disable_warnings()
     if insecure==True:
-       logger.warning("SSL verification is off! This might have security implications while connecting to the API.")
+       logger.warning("SSL verification is off! The validity of the CA will not be verified.")
        verify=False
     else:
        if len(ca_bundle or '')>0:
@@ -893,7 +893,7 @@ def agents_configs_broadcast_remove(api: str, user: str, password: str, ca_bundl
        exit(1)
     urllib3.disable_warnings()
     if insecure==True:
-       logger.warning("SSL verification is off! This might have security implications while connecting to the API.")
+       logger.warning("SSL verification is off! The validity of the CA will not be verified.")
        verify=False
     else:
        if len(ca_bundle or '')>0:
@@ -954,7 +954,7 @@ def agents_configs_broadcast_clear(api: str, user: str, password: str, ca_bundle
        exit(1)
     urllib3.disable_warnings()
     if insecure==True:
-       logger.warning("SSL verification is off! This might have security implications while connecting to the API.")
+       logger.warning("SSL verification is off! The validity of the CA will not be verified.")
        verify=False
     else:
        if len(ca_bundle or '')>0:
@@ -1002,7 +1002,7 @@ def agents_history_show(api: str, user: str, password: str, ca_bundle: str, inse
        exit(1)
     urllib3.disable_warnings()
     if insecure==True:
-       logger.warning("SSL verification is off! This might have security implications while connecting to the API.")
+       logger.warning("SSL verification is off! The validity of the CA will not be verified.")
        verify=False
     else:
        if len(ca_bundle or '')>0:
@@ -1062,7 +1062,7 @@ def vuln_report(api: str, user: str, password: str, ca_bundle: str, insecure: bo
        exit(1)
     urllib3.disable_warnings()
     if insecure==True:
-       logger.warning("SSL verification is off! This might have security implications while connecting to the API.")
+       logger.warning("SSL verification is off! The validity of the CA will not be verified.")
        verify=False
     else:
        if len(ca_bundle or '')>0:
