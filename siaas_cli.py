@@ -163,7 +163,7 @@ def grab_vulns_from_agent_data_dict(agent_data_dict, target_host=None, report_ty
 @click.version_option(version=SIAAS_VERSION)
 def siaas():
     """
-    CLI wrapper for the SIAAS API
+    A CLI wrapper for the SIAAS Server API.
     """
 
 
@@ -171,7 +171,7 @@ def siaas():
 @siaas.command("api-show")
 def api_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int):
     """
-    CLI route - shows API information
+    Shows API information.
     """
     if debug:
         log_level = logging.DEBUG
@@ -214,7 +214,7 @@ def api_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool,
 @siaas.command("server-show")
 def server_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int, module: str):
     """
-    CLI route - shows server information
+    Shows server information.
     """
     if debug:
         log_level = logging.DEBUG
@@ -259,7 +259,7 @@ def server_show(api: str, user: str, password: str, ca_bundle: str, insecure: bo
 @siaas.command("server-configs-show")
 def server_configs_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int):
     """
-    CLI route - shows configs for the server
+    Shows configs for the server.
     """
     if debug:
         log_level = logging.DEBUG
@@ -302,7 +302,7 @@ def server_configs_show(api: str, user: str, password: str, ca_bundle: str, inse
 @siaas.command("server-configs-add-or-update")
 def server_configs_add_or_update(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int, key_value: str):
     """
-    CLI route - adds or updates server configuration keys (accepts multiple configuration key=value pairs, comma-separated)
+    Adds or updates server configuration keys (accepts multiple configuration key=value pairs, comma-separated).
     """
     if debug:
         log_level = logging.DEBUG
@@ -376,7 +376,7 @@ def server_configs_add_or_update(api: str, user: str, password: str, ca_bundle: 
 @siaas.command("server-configs-remove")
 def server_configs_remove(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int, key: str):
     """
-    CLI route - removes server configuration keys (accepts multiple configuration keys, comma-separated)
+    Removes server configuration keys (accepts multiple configuration keys, comma-separated).
     """
     if debug:
         log_level = logging.DEBUG
@@ -441,7 +441,7 @@ def server_configs_remove(api: str, user: str, password: str, ca_bundle: str, in
 @siaas.command("server-configs-clear")
 def server_configs_clear(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int):
     """
-    CLI route - clears all server configuration keys
+    Clears all server configuration keys.
     """
     if debug:
         log_level = logging.DEBUG
@@ -485,7 +485,7 @@ def server_configs_clear(api: str, user: str, password: str, ca_bundle: str, ins
 @siaas.command("agents-show")
 def agents_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int, sort: str):
     """
-    CLI route - shows agents information
+    Shows agent information.
     """
     if debug:
         log_level = logging.DEBUG
@@ -532,7 +532,7 @@ def agents_show(api: str, user: str, password: str, ca_bundle: str, insecure: bo
 @siaas.command("agents-data-show")
 def agents_data_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int, agent_uid: str, module: str):
     """
-    CLI route - shows most recent data/metrics from agents (accepts multiple agent UIDs, comma-separated)
+    Shows most recent data/metrics from agents (accepts multiple agent UIDs, comma-separated).
     """
     if debug:
         log_level = logging.DEBUG
@@ -582,7 +582,7 @@ def agents_data_show(api: str, user: str, password: str, ca_bundle: str, insecur
 @siaas.command("agents-data-delete")
 def agents_data_delete(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int, agent_uid: str, days: int):
     """
-    CLI route - deletes agent data (accepts multiple agent UIDs, comma-separated)
+    Deletes agent data (accepts multiple agent UIDs, comma-separated).
     """
     if debug:
         log_level = logging.DEBUG
@@ -628,7 +628,7 @@ def agents_data_delete(api: str, user: str, password: str, ca_bundle: str, insec
 @siaas.command("agents-configs-show")
 def agents_configs_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int, agent_uid: str, broadcast: bool):
     """
-    CLI route - shows configs for the agents (accepts multiple agent UIDs, comma-separated)
+    Shows configs for the agents (accepts multiple agent UIDs, comma-separated).
     """
     if debug:
         log_level = logging.DEBUG
@@ -680,7 +680,7 @@ def agents_configs_show(api: str, user: str, password: str, ca_bundle: str, inse
 @siaas.command("agents-configs-add-or-update")
 def agents_configs_add_or_update(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int, agent_uid: str, key_value: str):
     """
-    CLI route - adds or updates agent configuration keys (accepts multiple agent UIDs and also multiple configuration key=value pairs, comma-separated)
+    Adds or updates agent configuration keys (accepts multiple agent UIDs and also multiple configuration key=value pairs, comma-separated).
     """
     if debug:
         log_level = logging.DEBUG
@@ -757,7 +757,7 @@ def agents_configs_add_or_update(api: str, user: str, password: str, ca_bundle: 
 @siaas.command("agents-configs-remove")
 def agents_configs_remove(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int, agent_uid: str, key: str):
     """
-    CLI route - removes agent configuration keys (accepts multiple agent UIDs and also multiple configuration keys, comma-separated)
+    Removes agent configuration keys (accepts multiple agent UIDs and also multiple configuration keys, comma-separated).
     """
     if debug:
         log_level = logging.DEBUG
@@ -825,7 +825,7 @@ def agents_configs_remove(api: str, user: str, password: str, ca_bundle: str, in
 @siaas.command("agents-configs-clear")
 def agents_configs_clear(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int, agent_uid: str):
     """
-    CLI route - clears all agent configuration keys (accepts multiple agent UIDs, comma-separated)
+    Clears all agent configuration keys (accepts multiple agent UIDs, comma-separated).
     """
     if debug:
         log_level = logging.DEBUG
@@ -869,7 +869,7 @@ def agents_configs_clear(api: str, user: str, password: str, ca_bundle: str, ins
 @siaas.command("agents-configs-broadcast-show")
 def agents_configs_broadcast_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int):
     """
-    CLI route - shows broadcast configs for the agents
+    Shows broadcast configs for the agents.
     """
     if debug:
         log_level = logging.DEBUG
@@ -914,7 +914,7 @@ def agents_configs_broadcast_show(api: str, user: str, password: str, ca_bundle:
 @siaas.command("agents-configs-broadcast-add-or-update")
 def agents_configs_broadcast_add_or_update(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int, key_value: str):
     """
-    CLI route - adds or updates agent broadcast configuration keys (accepts multiple configuration key=value pairs, comma-separated)
+    Adds or updates agent broadcast configuration keys (accepts multiple configuration key=value pairs, comma-separated).
     """
     if debug:
         log_level = logging.DEBUG
@@ -990,7 +990,7 @@ def agents_configs_broadcast_add_or_update(api: str, user: str, password: str, c
 @siaas.command("agents-configs-broadcast-remove")
 def agents_configs_broadcast_remove(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int, key: str):
     """
-    CLI route - removes agent broadcast configuration keys (accepts multiple configuration keys, comma-separated)
+    Removes agent broadcast configuration keys (accepts multiple configuration keys, comma-separated).
     """
     if debug:
         log_level = logging.DEBUG
@@ -1057,7 +1057,7 @@ def agents_configs_broadcast_remove(api: str, user: str, password: str, ca_bundl
 @siaas.command("agents-configs-broadcast-clear")
 def agents_configs_broadcast_clear(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int):
     """
-    CLI route - clears all agent broadcast configuration keys
+    Clears all agent broadcast configuration keys.
     """
     if debug:
         log_level = logging.DEBUG
@@ -1108,7 +1108,7 @@ def agents_configs_broadcast_clear(api: str, user: str, password: str, ca_bundle
 @siaas.command("agents-history-show")
 def agents_history_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int, agent_uid: str, module: str, limit: int, days: int, sort: str, older: bool, hide: bool):
     """
-    CLI route - shows historical data from agents (accepts multiple agent UIDs, comma-separated)
+    Shows historical data/metrics from agents (accepts multiple agent UIDs, comma-separated).
     """
     if debug:
         log_level = logging.DEBUG
@@ -1173,7 +1173,7 @@ def agents_history_show(api: str, user: str, password: str, ca_bundle: str, inse
 @siaas.command("vuln-report")
 def vuln_report(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int, agent: str, target_host: str, report_type: str):
     """
-    CLI route - reports scanned vulnerabilities
+    Reports scanned vulnerabilities.
     """
     if debug:
         log_level = logging.DEBUG
