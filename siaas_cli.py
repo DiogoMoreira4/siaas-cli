@@ -203,7 +203,8 @@ def api_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool,
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         exit(0)
     else:
-        logger.error("Error getting data from the server API: "+str(r.status_code))
+        logger.error("Error getting data from the server API: " +
+                     str(r.status_code))
         exit(1)
 
 
@@ -247,7 +248,8 @@ def server_show(api: str, user: str, password: str, ca_bundle: str, insecure: bo
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         exit(0)
     else:
-        logger.error("Error getting data from the server API: "+str(r.status_code))
+        logger.error("Error getting data from the server API: " +
+                     str(r.status_code))
         exit(1)
 
 
@@ -287,7 +289,8 @@ def server_configs_show(api: str, user: str, password: str, ca_bundle: str, inse
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         exit(0)
     else:
-        logger.error("Error getting data from the server API: "+str(r.status_code))
+        logger.error("Error getting data from the server API: " +
+                     str(r.status_code))
         exit(1)
 
 
@@ -330,15 +333,16 @@ def server_configs_add_or_update(api: str, user: str, password: str, ca_bundle: 
         logger.debug("All data that was read from the server API:\n" +
                      pprint.pformat(r.json(), sort_dicts=False))
     else:
-        logger.error("Error getting data from the server API: "+str(r.status_code))
+        logger.error("Error getting data from the server API: " +
+                     str(r.status_code))
         exit(1)
     current_config_dict = {}
     delta_config_dict = {}
     current_config_dict = r.json()["output"]
     for kv in key_value.split(','):
         try:
-            config_name = kv.split("=", 1)[0].rstrip().lstrip()
-            config_value = kv.split("=", 1)[1].rstrip().lstrip()
+            config_name = kv.split("=", 1)[0].strip()
+            config_value = kv.split("=", 1)[1].strip()
         except Exception as e:
             logger.warning("Key-value '"+str(kv)+"' was ignored: "+str(e))
             continue
@@ -359,7 +363,8 @@ def server_configs_add_or_update(api: str, user: str, password: str, ca_bundle: 
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         exit(0)
     else:
-        logger.error("Error posting data to the server API: "+str(r.status_code))
+        logger.error("Error posting data to the server API: " +
+                     str(r.status_code))
         exit(1)
 
 
@@ -401,13 +406,14 @@ def server_configs_remove(api: str, user: str, password: str, ca_bundle: str, in
         logger.debug("All data that was read from the server API:\n" +
                      pprint.pformat(r.json(), sort_dicts=False))
     else:
-        logger.error("Error getting data from the server API: "+str(r.status_code))
+        logger.error("Error getting data from the server API: " +
+                     str(r.status_code))
         exit(1)
     current_config_dict = {}
     current_config_dict = r.json()["output"]
     new_config_dict = dict(current_config_dict)
     for k in key.split(','):
-        config_name = k.rstrip().lstrip()
+        config_name = k.strip()
         new_config_dict.pop(config_name, None)
     try:
         request_uri = api+"/siaas-server/configs"
@@ -423,7 +429,8 @@ def server_configs_remove(api: str, user: str, password: str, ca_bundle: str, in
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         exit(0)
     else:
-        logger.error("Error posting data to the server API: "+str(r.status_code))
+        logger.error("Error posting data to the server API: " +
+                     str(r.status_code))
         exit(1)
 
 
@@ -464,7 +471,8 @@ def server_configs_clear(api: str, user: str, password: str, ca_bundle: str, ins
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         exit(0)
     else:
-        logger.error("Error deleting data from the server API: "+str(r.status_code))
+        logger.error("Error deleting data from the server API: " +
+                     str(r.status_code))
         exit(1)
 
 
@@ -508,7 +516,8 @@ def agents_show(api: str, user: str, password: str, ca_bundle: str, insecure: bo
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         exit(0)
     else:
-        logger.error("Error getting data from the server API: "+str(r.status_code))
+        logger.error("Error getting data from the server API: " +
+                     str(r.status_code))
         exit(1)
 
 
@@ -556,7 +565,8 @@ def agents_data_show(api: str, user: str, password: str, ca_bundle: str, insecur
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         exit(0)
     else:
-        logger.error("Error getting data from the server API: "+str(r.status_code))
+        logger.error("Error getting data from the server API: " +
+                     str(r.status_code))
         exit(1)
 
 
@@ -600,7 +610,8 @@ def agents_data_delete(api: str, user: str, password: str, ca_bundle: str, insec
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         exit(0)
     else:
-        logger.error("Error deleting data from the server API: "+str(r.status_code))
+        logger.error("Error deleting data from the server API: " +
+                     str(r.status_code))
         exit(1)
 
 
@@ -650,7 +661,8 @@ def agents_configs_show(api: str, user: str, password: str, ca_bundle: str, inse
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         exit(0)
     else:
-        logger.error("Error getting data from the server API: "+str(r.status_code))
+        logger.error("Error getting data from the server API: " +
+                     str(r.status_code))
         exit(1)
 
 
@@ -694,7 +706,8 @@ def agents_configs_add_or_update(api: str, user: str, password: str, ca_bundle: 
         logger.debug("All data that was read from the server API:\n" +
                      pprint.pformat(r.json(), sort_dicts=False))
     else:
-        logger.error("Error getting data from the server API: "+str(r.status_code))
+        logger.error("Error getting data from the server API: " +
+                     str(r.status_code))
         exit(1)
     result = 0
     for a in agent_uid.split(','):
@@ -704,8 +717,8 @@ def agents_configs_add_or_update(api: str, user: str, password: str, ca_bundle: 
             current_config_dict = r.json()["output"][a]
         for kv in key_value.split(','):
             try:
-                config_name = kv.split("=", 1)[0].rstrip().lstrip()
-                config_value = kv.split("=", 1)[1].rstrip().lstrip()
+                config_name = kv.split("=", 1)[0].strip()
+                config_value = kv.split("=", 1)[1].strip()
             except Exception as e:
                 logger.warning("Key-value '"+str(kv)+"' was ignored: "+str(e))
                 continue
@@ -770,7 +783,8 @@ def agents_configs_remove(api: str, user: str, password: str, ca_bundle: str, in
         logger.debug("All data that was read from the server API:\n" +
                      pprint.pformat(r.json(), sort_dicts=False))
     else:
-        logger.error("Error getting data from the server API: "+str(r.status_code))
+        logger.error("Error getting data from the server API: " +
+                     str(r.status_code))
         exit(1)
     result = 0
     for a in agent_uid.split(','):
@@ -779,7 +793,7 @@ def agents_configs_remove(api: str, user: str, password: str, ca_bundle: str, in
             current_config_dict = r.json()["output"][a]
         new_config_dict = dict(current_config_dict)
         for k in key.split(','):
-            config_name = k.rstrip().lstrip()
+            config_name = k.strip()
             new_config_dict.pop(config_name, None)
         try:
             request_uri = api+"/siaas-server/agents/configs/"+a
@@ -881,7 +895,8 @@ def agents_configs_broadcast_show(api: str, user: str, password: str, ca_bundle:
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         exit(0)
     else:
-        logger.error("Error getting data from the server API: "+str(r.status_code))
+        logger.error("Error getting data from the server API: " +
+                     str(r.status_code))
         exit(1)
 
 
@@ -925,7 +940,8 @@ def agents_configs_broadcast_add_or_update(api: str, user: str, password: str, c
         logger.debug("All data that was read from the server API:\n" +
                      pprint.pformat(r.json(), sort_dicts=False))
     else:
-        logger.error("Error getting data from the server API: "+str(r.status_code))
+        logger.error("Error getting data from the server API: " +
+                     str(r.status_code))
         exit(1)
     current_config_dict = {}
     delta_config_dict = {}
@@ -933,8 +949,8 @@ def agents_configs_broadcast_add_or_update(api: str, user: str, password: str, c
         current_config_dict = r.json()["output"][agent_uid]
     for kv in key_value.split(','):
         try:
-            config_name = kv.split("=", 1)[0].rstrip().lstrip()
-            config_value = kv.split("=", 1)[1].rstrip().lstrip()
+            config_name = kv.split("=", 1)[0].strip()
+            config_value = kv.split("=", 1)[1].strip()
         except Exception as e:
             logger.warning("Key-value '"+str(kv)+"' was ignored: "+str(e))
             continue
@@ -955,7 +971,8 @@ def agents_configs_broadcast_add_or_update(api: str, user: str, password: str, c
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         exit(0)
     else:
-        logger.error("Error posting data to the server API: "+str(r.status_code))
+        logger.error("Error posting data to the server API: " +
+                     str(r.status_code))
         exit(1)
 
 
@@ -998,14 +1015,15 @@ def agents_configs_broadcast_remove(api: str, user: str, password: str, ca_bundl
         logger.debug("All data that was read from the server API:\n" +
                      pprint.pformat(r.json(), sort_dicts=False))
     else:
-        logger.error("Error getting data from the server API: "+str(r.status_code))
+        logger.error("Error getting data from the server API: " +
+                     str(r.status_code))
         exit(1)
     current_config_dict = {}
     if agent_uid in r.json()["output"].keys():
         current_config_dict = r.json()["output"][agent_uid]
     new_config_dict = dict(current_config_dict)
     for k in key.split(','):
-        config_name = k.rstrip().lstrip()
+        config_name = k.strip()
         new_config_dict.pop(config_name, None)
     try:
         request_uri = api+"/siaas-server/agents/configs/"+agent_uid
@@ -1021,7 +1039,8 @@ def agents_configs_broadcast_remove(api: str, user: str, password: str, ca_bundl
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         exit(0)
     else:
-        logger.error("Error posting data to the server API: "+str(r.status_code))
+        logger.error("Error posting data to the server API: " +
+                     str(r.status_code))
         exit(1)
 
 
@@ -1063,7 +1082,8 @@ def agents_configs_broadcast_clear(api: str, user: str, password: str, ca_bundle
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         exit(0)
     else:
-        logger.error("Error deleting data from the server API: "+str(r.status_code))
+        logger.error("Error deleting data from the server API: " +
+                     str(r.status_code))
         exit(1)
 
 
@@ -1130,7 +1150,8 @@ def agents_history_show(api: str, user: str, password: str, ca_bundle: str, inse
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         exit(0)
     else:
-        logger.error("Error getting data from the server API: "+str(r.status_code))
+        logger.error("Error getting data from the server API: " +
+                     str(r.status_code))
         exit(1)
 
 
@@ -1177,7 +1198,8 @@ def vuln_report(api: str, user: str, password: str, ca_bundle: str, insecure: bo
         logger.debug("All data that was read from the server API:\n" +
                      pprint.pformat(r.json(), sort_dicts=False))
     else:
-        logger.error("Error getting data from the server API: "+str(r.status_code))
+        logger.error("Error getting data from the server API: " +
+                     str(r.status_code))
         exit(1)
     if len(target_host or '') == 0:
         target_host = None
