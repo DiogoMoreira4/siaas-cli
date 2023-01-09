@@ -197,15 +197,13 @@ def api_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool,
                          allow_redirects=True, auth=(user, password))
     except Exception as e:
         logger.error(
-            "Error while performing a GET request to the API: "+str(e))
+            "Error while performing a GET request to the server API: "+str(e))
         exit(1)
     if r.status_code == 200:
-        logger.debug("All data that was read from the API:\n" +
-                     pprint.pformat(r.json(), sort_dicts=False))
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         exit(0)
     else:
-        logger.error("Error getting data from the API: "+str(r.status_code))
+        logger.error("Error getting data from the server API: "+str(r.status_code))
         exit(1)
 
 
@@ -243,15 +241,13 @@ def server_show(api: str, user: str, password: str, ca_bundle: str, insecure: bo
                          allow_redirects=True, auth=(user, password))
     except Exception as e:
         logger.error(
-            "Error while performing a GET request to the API: "+str(e))
+            "Error while performing a GET request to the server API: "+str(e))
         exit(1)
     if r.status_code == 200:
-        logger.debug("All data that was read from the API:\n" +
-                     pprint.pformat(r.json(), sort_dicts=False))
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         exit(0)
     else:
-        logger.error("Error getting data from the API: "+str(r.status_code))
+        logger.error("Error getting data from the server API: "+str(r.status_code))
         exit(1)
 
 
@@ -285,15 +281,13 @@ def server_configs_show(api: str, user: str, password: str, ca_bundle: str, inse
                          verify=verify, allow_redirects=True, auth=(user, password))
     except Exception as e:
         logger.error(
-            "Error while performing a GET request to the API: "+str(e))
+            "Error while performing a GET request to the server API: "+str(e))
         exit(1)
     if r.status_code == 200:
-        logger.debug("All data that was read from the API:\n" +
-                     pprint.pformat(r.json(), sort_dicts=False))
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         exit(0)
     else:
-        logger.error("Error getting data from the API: "+str(r.status_code))
+        logger.error("Error getting data from the server API: "+str(r.status_code))
         exit(1)
 
 
@@ -330,13 +324,13 @@ def server_configs_add_or_update(api: str, user: str, password: str, ca_bundle: 
                          allow_redirects=True, auth=(user, password))
     except Exception as e:
         logger.error(
-            "Error while performing a GET request to the API: "+str(e))
+            "Error while performing a GET request to the server API: "+str(e))
         exit(1)
     if r.status_code == 200:
-        logger.debug("All data that was read from the API:\n" +
+        logger.debug("All data that was read from the server API:\n" +
                      pprint.pformat(r.json(), sort_dicts=False))
     else:
-        logger.error("Error getting data from the API: "+str(r.status_code))
+        logger.error("Error getting data from the server API: "+str(r.status_code))
         exit(1)
     current_config_dict = {}
     delta_config_dict = {}
@@ -357,17 +351,15 @@ def server_configs_add_or_update(api: str, user: str, password: str, ca_bundle: 
                           verify=verify, allow_redirects=True, auth=(user, password))
     except Exception as e:
         logger.error(
-            "Error while performing a POST request to the API: "+str(e))
+            "Error while performing a POST request to the server API: "+str(e))
         exit(1)
     if r.status_code == 200:
-        logger.debug("All data that was written to the API:\n" +
+        logger.debug("All data that was written to the server API:\n" +
                      pprint.pformat(new_config_dict, sort_dicts=False))
-        logger.debug("Posting output from the API:\n" +
-                     pprint.pformat(r.json(), sort_dicts=False))
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         exit(0)
     else:
-        logger.error("Error posting data to the API: "+str(r.status_code))
+        logger.error("Error posting data to the server API: "+str(r.status_code))
         exit(1)
 
 
@@ -403,13 +395,13 @@ def server_configs_remove(api: str, user: str, password: str, ca_bundle: str, in
                          allow_redirects=True, auth=(user, password))
     except Exception as e:
         logger.error(
-            "Error while performing a GET request to the API: "+str(e))
+            "Error while performing a GET request to the server API: "+str(e))
         exit(1)
     if r.status_code == 200:
-        logger.debug("All data that was read from the API:\n" +
+        logger.debug("All data that was read from the server API:\n" +
                      pprint.pformat(r.json(), sort_dicts=False))
     else:
-        logger.error("Error getting data from the API: "+str(r.status_code))
+        logger.error("Error getting data from the server API: "+str(r.status_code))
         exit(1)
     current_config_dict = {}
     current_config_dict = r.json()["output"]
@@ -423,17 +415,15 @@ def server_configs_remove(api: str, user: str, password: str, ca_bundle: str, in
                           verify=verify, allow_redirects=True, auth=(user, password))
     except Exception as e:
         logger.error(
-            "Error while performing a POST request to the API: "+str(e))
+            "Error while performing a POST request to the server API: "+str(e))
         exit(1)
     if r.status_code == 200:
-        logger.debug("All data that was written to the API:\n" +
+        logger.debug("All data that was written to the server API:\n" +
                      pprint.pformat(new_config_dict, sort_dicts=False))
-        logger.debug("Posting output from the API:\n" +
-                     pprint.pformat(r.json(), sort_dicts=False))
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         exit(0)
     else:
-        logger.error("Error posting data to the API: "+str(r.status_code))
+        logger.error("Error posting data to the server API: "+str(r.status_code))
         exit(1)
 
 
@@ -468,15 +458,13 @@ def server_configs_clear(api: str, user: str, password: str, ca_bundle: str, ins
                             allow_redirects=True, auth=(user, password))
     except Exception as e:
         logger.error(
-            "Error while performing a DELETE request to the API: "+str(e))
+            "Error while performing a DELETE request to the server API: "+str(e))
         exit(1)
     if r.status_code == 200:
-        logger.debug("Deletion output from the API:\n" +
-                     pprint.pformat(r.json(), sort_dicts=False))
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         exit(0)
     else:
-        logger.error("Error deleting data from the API: "+str(r.status_code))
+        logger.error("Error deleting data from the server API: "+str(r.status_code))
         exit(1)
 
 
@@ -514,15 +502,13 @@ def agents_show(api: str, user: str, password: str, ca_bundle: str, insecure: bo
 
     except Exception as e:
         logger.error(
-            "Error while performing a GET request to the API: "+str(e))
+            "Error while performing a GET request to the server API: "+str(e))
         exit(1)
     if r.status_code == 200:
-        logger.debug("All data that was read from the API:\n" +
-                     pprint.pformat(r.json(), sort_dicts=False))
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         exit(0)
     else:
-        logger.error("Error getting data from the API: "+str(r.status_code))
+        logger.error("Error getting data from the server API: "+str(r.status_code))
         exit(1)
 
 
@@ -564,15 +550,13 @@ def agents_data_show(api: str, user: str, password: str, ca_bundle: str, insecur
                          allow_redirects=True, auth=(user, password))
     except Exception as e:
         logger.error(
-            "Error while performing a GET request to the API: "+str(e))
+            "Error while performing a GET request to the server API: "+str(e))
         exit(1)
     if r.status_code == 200:
-        logger.debug("All data that was read from the API:\n" +
-                     pprint.pformat(r.json(), sort_dicts=False))
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         exit(0)
     else:
-        logger.error("Error getting data from the API: "+str(r.status_code))
+        logger.error("Error getting data from the server API: "+str(r.status_code))
         exit(1)
 
 
@@ -610,15 +594,13 @@ def agents_data_delete(api: str, user: str, password: str, ca_bundle: str, insec
                             allow_redirects=True, auth=(user, password))
     except Exception as e:
         logger.error(
-            "Error while performing a DELETE request to the API: "+str(e))
+            "Error while performing a DELETE request to the server API: "+str(e))
         exit(1)
     if r.status_code == 200:
-        logger.debug("Deletion output from the API:\n" +
-                     pprint.pformat(r.json(), sort_dicts=False))
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         exit(0)
     else:
-        logger.error("Error deleting data from the API: "+str(r.status_code))
+        logger.error("Error deleting data from the server API: "+str(r.status_code))
         exit(1)
 
 
@@ -662,15 +644,13 @@ def agents_configs_show(api: str, user: str, password: str, ca_bundle: str, inse
                          allow_redirects=True, auth=(user, password))
     except Exception as e:
         logger.error(
-            "Error while performing a GET request to the API: "+str(e))
+            "Error while performing a GET request to the server API: "+str(e))
         exit(1)
     if r.status_code == 200:
-        logger.debug("All data that was read from the API:\n" +
-                     pprint.pformat(r.json(), sort_dicts=False))
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         exit(0)
     else:
-        logger.error("Error getting data from the API: "+str(r.status_code))
+        logger.error("Error getting data from the server API: "+str(r.status_code))
         exit(1)
 
 
@@ -708,13 +688,13 @@ def agents_configs_add_or_update(api: str, user: str, password: str, ca_bundle: 
                          allow_redirects=True, auth=(user, password))
     except Exception as e:
         logger.error(
-            "Error while performing a GET request to the API: "+str(e))
+            "Error while performing a GET request to the server API: "+str(e))
         exit(1)
     if r.status_code == 200:
-        logger.debug("All data that was read from the API:\n" +
+        logger.debug("All data that was read from the server API:\n" +
                      pprint.pformat(r.json(), sort_dicts=False))
     else:
-        logger.error("Error getting data from the API: "+str(r.status_code))
+        logger.error("Error getting data from the server API: "+str(r.status_code))
         exit(1)
     result = 0
     for a in agent_uid.split(','):
@@ -784,13 +764,13 @@ def agents_configs_remove(api: str, user: str, password: str, ca_bundle: str, in
                          allow_redirects=True, auth=(user, password))
     except Exception as e:
         logger.error(
-            "Error while performing a GET request to the API: "+str(e))
+            "Error while performing a GET request to the server API: "+str(e))
         exit(1)
     if r.status_code == 200:
-        logger.debug("All data that was read from the API:\n" +
+        logger.debug("All data that was read from the server API:\n" +
                      pprint.pformat(r.json(), sort_dicts=False))
     else:
-        logger.error("Error getting data from the API: "+str(r.status_code))
+        logger.error("Error getting data from the server API: "+str(r.status_code))
         exit(1)
     result = 0
     for a in agent_uid.split(','):
@@ -855,8 +835,6 @@ def agents_configs_clear(api: str, user: str, password: str, ca_bundle: str, ins
             "Error while performing a request to the server API: "+str(e))
         exit(1)
     if r.status_code == 200:
-        logger.debug("Output from the API:\n" +
-                     pprint.pformat(r.json(), sort_dicts=False))
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         exit(0)
     else:
@@ -897,15 +875,13 @@ def agents_configs_broadcast_show(api: str, user: str, password: str, ca_bundle:
                          allow_redirects=True, auth=(user, password))
     except Exception as e:
         logger.error(
-            "Error while performing a GET request to the API: "+str(e))
+            "Error while performing a GET request to the server API: "+str(e))
         exit(1)
     if r.status_code == 200:
-        logger.debug("All data that was read from the API:\n" +
-                     pprint.pformat(r.json(), sort_dicts=False))
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         exit(0)
     else:
-        logger.error("Error getting data from the API: "+str(r.status_code))
+        logger.error("Error getting data from the server API: "+str(r.status_code))
         exit(1)
 
 
@@ -943,13 +919,13 @@ def agents_configs_broadcast_add_or_update(api: str, user: str, password: str, c
                          allow_redirects=True, auth=(user, password))
     except Exception as e:
         logger.error(
-            "Error while performing a GET request to the API: "+str(e))
+            "Error while performing a GET request to the server API: "+str(e))
         exit(1)
     if r.status_code == 200:
-        logger.debug("All data that was read from the API:\n" +
+        logger.debug("All data that was read from the server API:\n" +
                      pprint.pformat(r.json(), sort_dicts=False))
     else:
-        logger.error("Error getting data from the API: "+str(r.status_code))
+        logger.error("Error getting data from the server API: "+str(r.status_code))
         exit(1)
     current_config_dict = {}
     delta_config_dict = {}
@@ -971,17 +947,15 @@ def agents_configs_broadcast_add_or_update(api: str, user: str, password: str, c
                           verify=verify, allow_redirects=True, auth=(user, password))
     except Exception as e:
         logger.error(
-            "Error while performing a POST request to the API: "+str(e))
+            "Error while performing a POST request to the server API: "+str(e))
         exit(1)
     if r.status_code == 200:
-        logger.debug("All data that was written to the API:\n" +
+        logger.debug("All data that was written to the server API:\n" +
                      pprint.pformat(new_config_dict, sort_dicts=False))
-        logger.debug("Posting output from the API:\n" +
-                     pprint.pformat(r.json(), sort_dicts=False))
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         exit(0)
     else:
-        logger.error("Error posting data to the API: "+str(r.status_code))
+        logger.error("Error posting data to the server API: "+str(r.status_code))
         exit(1)
 
 
@@ -1018,13 +992,13 @@ def agents_configs_broadcast_remove(api: str, user: str, password: str, ca_bundl
                          allow_redirects=True, auth=(user, password))
     except Exception as e:
         logger.error(
-            "Error while performing a GET request to the API: "+str(e))
+            "Error while performing a GET request to the server API: "+str(e))
         exit(1)
     if r.status_code == 200:
-        logger.debug("All data that was read from the API:\n" +
+        logger.debug("All data that was read from the server API:\n" +
                      pprint.pformat(r.json(), sort_dicts=False))
     else:
-        logger.error("Error getting data from the API: "+str(r.status_code))
+        logger.error("Error getting data from the server API: "+str(r.status_code))
         exit(1)
     current_config_dict = {}
     if agent_uid in r.json()["output"].keys():
@@ -1039,17 +1013,15 @@ def agents_configs_broadcast_remove(api: str, user: str, password: str, ca_bundl
                           verify=verify, allow_redirects=True, auth=(user, password))
     except Exception as e:
         logger.error(
-            "Error while performing a POST request to the API: "+str(e))
+            "Error while performing a POST request to the server API: "+str(e))
         exit(1)
     if r.status_code == 200:
-        logger.debug("All data that was written to the API:\n" +
+        logger.debug("All data that was written to the server API:\n" +
                      pprint.pformat(new_config_dict, sort_dicts=False))
-        logger.debug("Posting output from the API:\n" +
-                     pprint.pformat(r.json(), sort_dicts=False))
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         exit(0)
     else:
-        logger.error("Error posting data to the API: "+str(r.status_code))
+        logger.error("Error posting data to the server API: "+str(r.status_code))
         exit(1)
 
 
@@ -1085,15 +1057,13 @@ def agents_configs_broadcast_clear(api: str, user: str, password: str, ca_bundle
                             allow_redirects=True, auth=(user, password))
     except Exception as e:
         logger.error(
-            "Error while performing a DELETE request to the API: "+str(e))
+            "Error while performing a DELETE request to the server API: "+str(e))
         exit(1)
     if r.status_code == 200:
-        logger.debug("Deletion output from the API:\n" +
-                     pprint.pformat(r.json(), sort_dicts=False))
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         exit(0)
     else:
-        logger.error("Error deleting data from the API: "+str(r.status_code))
+        logger.error("Error deleting data from the server API: "+str(r.status_code))
         exit(1)
 
 
@@ -1154,15 +1124,13 @@ def agents_history_show(api: str, user: str, password: str, ca_bundle: str, inse
                          allow_redirects=True, auth=(user, password))
     except Exception as e:
         logger.error(
-            "Error while performing a GET request to the API: "+str(e))
+            "Error while performing a GET request to the server API: "+str(e))
         exit(1)
     if r.status_code == 200:
-        logger.debug("All data that was read from the API:\n" +
-                     pprint.pformat(r.json(), sort_dicts=False))
         print(pprint.pformat(r.json(), sort_dicts=False, width=chars_line))
         exit(0)
     else:
-        logger.error("Error getting data from the API: "+str(r.status_code))
+        logger.error("Error getting data from the server API: "+str(r.status_code))
         exit(1)
 
 
@@ -1203,13 +1171,13 @@ def vuln_report(api: str, user: str, password: str, ca_bundle: str, insecure: bo
                          allow_redirects=True, auth=(user, password))
     except Exception as e:
         logger.error(
-            "Error while performing a GET request to the API: "+str(e))
+            "Error while performing a GET request to the server API: "+str(e))
         exit(1)
     if r.status_code == 200:
-        logger.debug("All data that was read from the API:\n" +
+        logger.debug("All data that was read from the server API:\n" +
                      pprint.pformat(r.json(), sort_dicts=False))
     else:
-        logger.error("Error getting data from the API: "+str(r.status_code))
+        logger.error("Error getting data from the server API: "+str(r.status_code))
         exit(1)
     if len(target_host or '') == 0:
         target_host = None
@@ -1219,8 +1187,6 @@ def vuln_report(api: str, user: str, password: str, ca_bundle: str, insecure: bo
         logger.error("There was an error getting vulnerability dict.")
         exit(1)
 
-    logger.debug("All data returned by the grabbing vuln function:\n" +
-                 pprint.pformat(vuln_dict, sort_dicts=False))
     print(pprint.pformat(vuln_dict, sort_dicts=False, width=chars_line))
     exit(0)
 
