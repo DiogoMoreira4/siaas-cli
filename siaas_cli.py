@@ -8,6 +8,8 @@ import urllib3
 import pprint
 import logging
 import os
+import re
+import csv
 
 logger = logging.getLogger(__name__)
 
@@ -339,10 +341,10 @@ def server_configs_add_or_update(api: str, user: str, password: str, ca_bundle: 
     current_config_dict = {}
     delta_config_dict = {}
     current_config_dict = r.json()["output"]
-    for kv in key_value.split(','):
+    for kv in re.split(''',(?=(?:[^'"]|'[^']*'|"[^"]*")*$)''', key_value):  # special handling of groups of comma-separated values within quotes
         try:
-            config_name = kv.split("=", 1)[0].strip()
-            config_value = kv.split("=", 1)[1].strip()
+            config_name = kv.split("=", 1)[0].strip().strip('\'\"').strip()
+            config_value = kv.split("=", 1)[1].strip().strip('\'\"').strip()
         except Exception as e:
             logger.warning("Key-value '"+str(kv)+"' was ignored: "+str(e))
             continue
@@ -715,10 +717,11 @@ def agents_configs_add_or_update(api: str, user: str, password: str, ca_bundle: 
         delta_config_dict = {}
         if a in r.json()["output"].keys():
             current_config_dict = r.json()["output"][a]
-        for kv in key_value.split(','):
+        for kv in re.split(''',(?=(?:[^'"]|'[^']*'|"[^"]*")*$)''', key_value):  # special handling of groups of comma-separated values within quotes
             try:
-                config_name = kv.split("=", 1)[0].strip()
-                config_value = kv.split("=", 1)[1].strip()
+                config_name = kv.split("=", 1)[0].strip().strip('\'\"').strip()
+                config_value = kv.split(
+                    "=", 1)[1].strip().strip('\'\"').strip()
             except Exception as e:
                 logger.warning("Key-value '"+str(kv)+"' was ignored: "+str(e))
                 continue
@@ -947,10 +950,10 @@ def agents_configs_broadcast_add_or_update(api: str, user: str, password: str, c
     delta_config_dict = {}
     if agent_uid in r.json()["output"].keys():
         current_config_dict = r.json()["output"][agent_uid]
-    for kv in key_value.split(','):
+    for kv in re.split(''',(?=(?:[^'"]|'[^']*'|"[^"]*")*$)''', key_value):  # special handling of groups of comma-separated values within quotes
         try:
-            config_name = kv.split("=", 1)[0].strip()
-            config_value = kv.split("=", 1)[1].strip()
+            config_name = kv.split("=", 1)[0].strip().strip('\'\"').strip()
+            config_value = kv.split("=", 1)[1].strip().strip('\'\"').strip()
         except Exception as e:
             logger.warning("Key-value '"+str(kv)+"' was ignored: "+str(e))
             continue
