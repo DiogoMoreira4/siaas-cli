@@ -9,7 +9,6 @@ import pprint
 import logging
 import os
 import re
-import csv
 
 logger = logging.getLogger(__name__)
 
