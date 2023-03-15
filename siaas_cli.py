@@ -45,13 +45,13 @@ def add_options(options):
     return _add_options
 
 
-def grab_vulns_from_agent_data_dict(agent_data_dict, target_host=None, report_type="exploit_only"):
+def grab_vulns_from_agent_data_dict(agent_data_dict, target_host=None, report_type="vuln_only"):
     """
-    Receives an agent data dict and returns a list of vulnerabilities, depending on report_type: 'all', 'vuln_only', 'exploit_only'
+    Receives an agent data dict and returns a list of vulnerabilities, depending on report_type: 'all', 'vuln_only', 'exploit_vuln_only'
     Returns the vuln dict if all OK; Returns False if anything fails
     """
     if len(report_type or '') == 0:
-        report_type = "exploit_only"
+        report_type = "vuln_only"
 
     new_dict = {}
 
@@ -118,7 +118,7 @@ def grab_vulns_from_agent_data_dict(agent_data_dict, target_host=None, report_ty
                                                                     new_dict[a][b][c][d][e][f][g] = {
                                                                     }
                                                                 new_dict[a][b][c][d][e][f][g][h] = agent_data_dict[a][b][c][d][e][f][g][h]
-                                                            # exploit_only (default)
+                                                            # exploit_vuln_only
                                                             else:
                                                                 for i in agent_data_dict[a][b][c][d][e][f][g][h].keys():
                                                                     for j in agent_data_dict[a][b][c][d][e][f][g][h][i].keys():
@@ -1160,7 +1160,7 @@ def agents_history_show(api: str, user: str, password: str, ca_bundle: str, inse
 @add_options(_cmd_options)
 @click.option('-a', '--agent', help="Only shows results scanned by these agents (comma-separated).")
 @click.option('-t', '--target-host', help="Only shows results targeting these hosts (comma-separated).")
-@click.option('-r', '--report-type', help="Type of report to generate ('all', 'vuln_only', 'exploit_only'). (Default: 'exploit_only')", default="exploit_only")
+@click.option('-r', '--report-type', help="Type of report to generate ('all', 'vuln_only', 'exploit_vuln_only'). (Default: 'vuln_only')", default="vuln_only")
 @siaas.command("vuln-report")
 def vuln_report(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int, agent: str, target_host: str, report_type: str):
     """

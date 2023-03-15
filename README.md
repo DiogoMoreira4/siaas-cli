@@ -79,4 +79,4 @@ Clear all published configuration keys for all agents (restores config from agen
 
 - Vulnerability Report:
 
-Show vulnerabilities found in host '192.168.122.1': `siaas-cli vuln-report -r vuln_only -t 192.168.122.1`
+Show only exploitable vulnerabilities found in host '192.168.122.1': `siaas-cli vuln-report -r exploit_vuln_only -t 192.168.122.1`
