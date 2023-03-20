@@ -1157,8 +1157,8 @@ def agents_history_show(api: str, user: str, password: str, ca_bundle: str, inse
 
 @add_options(_cmd_options)
 @click.option('-a', '--agent', help="Only shows results scanned by these agents (comma-separated).")
-@click.option('-t', '--target-host', help="Only shows results targeting these hosts (comma-separated).")
-@click.option('-r', '--report-type', help="Type of report to generate ('all', 'vuln_only', 'exploit_vuln_only'). (Default: 'vuln_only')", default="vuln_only")
+@click.option('-h', '--target-host', help="Only shows results targeting these hosts (comma-separated).")
+@click.option('-t', '--report-type', help="Type of report to generate ('all', 'vuln_only', 'exploit_vuln_only'). (Default: 'vuln_only')", default="vuln_only")
 @siaas.command("vuln-report")
 def vuln_report(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int, agent: str, target_host: str, report_type: str):
     """
