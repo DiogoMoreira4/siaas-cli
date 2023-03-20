@@ -256,7 +256,7 @@ def server_show(api: str, user: str, password: str, ca_bundle: str, insecure: bo
 @siaas.command("server-configs-show")
 def server_configs_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int):
     """
-    Shows configs for the server.
+    Shows published server configuration keys. (WARNING: This command might display passwords in clear text!)
     """
     if debug:
         log_level = logging.DEBUG
@@ -298,7 +298,7 @@ def server_configs_show(api: str, user: str, password: str, ca_bundle: str, inse
 @siaas.command("server-configs-add-or-update")
 def server_configs_add_or_update(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int, key_value: str):
     """
-    Adds or updates server configuration keys (accepts multiple configuration key=value pairs, comma-separated).
+    Adds or updates published server configuration keys (accepts multiple configuration key=value pairs, comma-separated).
     """
     if debug:
         log_level = logging.DEBUG
@@ -372,7 +372,7 @@ def server_configs_add_or_update(api: str, user: str, password: str, ca_bundle: 
 @siaas.command("server-configs-remove")
 def server_configs_remove(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int, key: str):
     """
-    Removes server configuration keys (accepts multiple configuration keys, comma-separated).
+    Removes published server configuration keys (accepts multiple configuration keys, comma-separated).
     """
     if debug:
         log_level = logging.DEBUG
@@ -437,7 +437,7 @@ def server_configs_remove(api: str, user: str, password: str, ca_bundle: str, in
 @siaas.command("server-configs-clear")
 def server_configs_clear(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int):
     """
-    Clears all server configuration keys.
+    Clears all published server configuration keys.
     """
     if debug:
         log_level = logging.DEBUG
@@ -620,7 +620,7 @@ def agents_data_delete(api: str, user: str, password: str, ca_bundle: str, insec
 @siaas.command("agents-configs-show")
 def agents_configs_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int, agent_uid: str, broadcast: bool):
     """
-    Shows configs for the agents (accepts multiple agent UIDs, comma-separated).
+    Shows published agent configuration keys (accepts multiple agent UIDs, comma-separated). (WARNING: This command might display passwords in clear text!)
     """
     if debug:
         log_level = logging.DEBUG
@@ -671,7 +671,7 @@ def agents_configs_show(api: str, user: str, password: str, ca_bundle: str, inse
 @siaas.command("agents-configs-add-or-update")
 def agents_configs_add_or_update(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int, agent_uid: str, key_value: str):
     """
-    Adds or updates agent configuration keys (accepts multiple agent UIDs and also multiple configuration key=value pairs, comma-separated).
+    Adds or updates published agent configuration keys (accepts multiple agent UIDs and also multiple configuration key=value pairs, comma-separated).
     """
     if debug:
         log_level = logging.DEBUG
@@ -750,7 +750,7 @@ def agents_configs_add_or_update(api: str, user: str, password: str, ca_bundle: 
 @siaas.command("agents-configs-remove")
 def agents_configs_remove(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int, agent_uid: str, key: str):
     """
-    Removes agent configuration keys (accepts multiple agent UIDs and also multiple configuration keys, comma-separated).
+    Removes published agent configuration keys (accepts multiple agent UIDs and also multiple configuration keys, comma-separated).
     """
     if debug:
         log_level = logging.DEBUG
@@ -819,7 +819,7 @@ def agents_configs_remove(api: str, user: str, password: str, ca_bundle: str, in
 @siaas.command("agents-configs-clear")
 def agents_configs_clear(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int, agent_uid: str):
     """
-    Clears all agent configuration keys (accepts multiple agent UIDs, comma-separated).
+    Clears all published agent configuration keys (accepts multiple agent UIDs, comma-separated).
     """
     if debug:
         log_level = logging.DEBUG
@@ -861,7 +861,7 @@ def agents_configs_clear(api: str, user: str, password: str, ca_bundle: str, ins
 @siaas.command("agents-configs-broadcast-show")
 def agents_configs_broadcast_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int):
     """
-    Shows broadcast configs for the agents.
+    Shows published agent broadcast configuration keys. (WARNING: This command might display passwords in clear text!)
     """
     if debug:
         log_level = logging.DEBUG
@@ -905,7 +905,7 @@ def agents_configs_broadcast_show(api: str, user: str, password: str, ca_bundle:
 @siaas.command("agents-configs-broadcast-add-or-update")
 def agents_configs_broadcast_add_or_update(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int, key_value: str):
     """
-    Adds or updates agent broadcast configuration keys (accepts multiple configuration key=value pairs, comma-separated).
+    Adds or updates published agent broadcast configuration keys (accepts multiple configuration key=value pairs, comma-separated).
     """
     if debug:
         log_level = logging.DEBUG
@@ -981,7 +981,7 @@ def agents_configs_broadcast_add_or_update(api: str, user: str, password: str, c
 @siaas.command("agents-configs-broadcast-remove")
 def agents_configs_broadcast_remove(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int, key: str):
     """
-    Removes agent broadcast configuration keys (accepts multiple configuration keys, comma-separated).
+    Removes published agent broadcast configuration keys (accepts multiple configuration keys, comma-separated).
     """
     if debug:
         log_level = logging.DEBUG
@@ -1048,7 +1048,7 @@ def agents_configs_broadcast_remove(api: str, user: str, password: str, ca_bundl
 @siaas.command("agents-configs-broadcast-clear")
 def agents_configs_broadcast_clear(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, chars_line: int):
     """
-    Clears all agent broadcast configuration keys.
+    Clears all published agent broadcast configuration keys.
     """
     if debug:
         log_level = logging.DEBUG
