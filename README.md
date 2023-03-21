@@ -37,11 +37,11 @@ API info, but limit the number of chars per line to adapt readibility: `siaas-cl
 
 Show server information and currently active configurations: `siaas-cli server-show`
 
-Publish server configuration key(s) (configure email and report type): `siaas-cli server-configs-add-or-update mailer_smtp_account=john.smith@gmail.com,mailer_smtp_pwd=Password123,mailer_smtp_server=smtp.gmail.com,mailer_smtp_tls_port=587,mailer_smtp_receivers=joanna.smith@nowhere.com,mailer_smtp_report_type=vuln_only`
+Publish server configuration key(s) (configure email and report type): `siaas-cli server-configs-add-or-update mailer_smtp_account=john.smith@gmail.com,mailer_smtp_pwd=Password123,mailer_smtp_server=smtp.gmail.com,mailer_smtp_tls_port=587,mailer_smtp_recipients=joanna.smith@nowhere.com,mailer_smtp_report_type=vuln_only`
 
 Show published configuration keys for the server: `siaas-cli server-configs-show`
 
-Remove published server configuration key 'mailer_smtp_receivers': `siaas-cli server-configs-remove mailer_smtp_receivers`
+Remove published server configuration key 'mailer_smtp_recipients': `siaas-cli server-configs-remove mailer_smtp_recipients`
 
 Clear all published server configuration keys (restores config from server's local config file): `siaas-cli server-configs-clear`
 
