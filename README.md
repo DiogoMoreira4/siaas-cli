@@ -75,11 +75,11 @@ Force this config to be empty (override local config): `siaas-cli agents-configs
 
 Show published configurations for all agents (published single-agent configurations, if existing, will always take precedence): `siaas-cli agents-configs-broadcast-show`
 
-Publish configuration key(s) for all agents (configure portscanner loop interval to once a day): `siaas-cli agents-configs-broadcast-add-or-update portscanner_loop_interval_sec=86400`
+Publish configuration key(s) for all agents (configure port scanning loop interval to twice a day, and to transfer data in loops of 2 hours): `siaas-cli agents-configs-broadcast-add-or-update portscanner_loop_interval_sec=43200,datatransfer_loop_interval_sec=7200`
 
 Show published configuration keys for all agents: `siaas-cli agents-configs-broadcast-show`
 
-Remove published key 'portscanner_loop_interval' for all agents: `siaas-cli agents-configs-broadcast-remove portscanner_loop_interval`
+Remove published key 'portscanner_loop_interval_sec' for all agents: `siaas-cli agents-configs-broadcast-remove portscanner_loop_interval_sec`
 
 Clear all published configuration keys for all agents (restores config from agents' local config files): `siaas-cli agents-configs-broadcast-clear`
 
