@@ -55,7 +55,9 @@ Show the neighborhood of all agents: `siaas-cli agents-data-show -m neighborhood
 
 Show the active configuration for an agent (defaults to local config file if no configs are published for a said key): `siaas-cli agents-data-show -m config 10000000dbb5bbc1`
 
-Publish configuration key(s) for an agent (configure hosts to scan and nmap scripts to run): `siaas-cli agents-configs-add-or-update 10000000dbb5bbc1 manual_hosts=\"google.com,microsoft.com\",nmap_scripts=\"vuln,vulscan\"`
+Publish configuration key(s) for an agent (configure hosts to scan and nmap scripts to run): `siaas-cli agents-configs-add-or-update 10000000dbb5bbc1 manual_hosts='"google.com,microsoft.com"',nmap_scripts='"vuln,vulscan"'`
+
+Configure nickname and description for an agent: `siaas-cli agents-configs-add-or-update 10000000dbb5bbc1 nickname=RPi4,description="A Raspberry Pi 4 agent"`
 
 Show published configuration keys for an agent: `siaas-cli agents-configs-show 10000000dbb5bbc1`
 
@@ -63,7 +65,7 @@ Remove published key 'nmap_scripts' for two agents (go back to using local confi
 
 Clear all published configuration keys for an agent (restores config from agent's local config file): `siaas-cli agents-configs-clear 10000000dbb5bbc1`
 
-Force this config to be empty (override local config): `siaas-cli agents-configs-add-or-update 10000000dbb5bbc1 nmap_scripts=\"\"`
+Force this config to be empty (override local config): `siaas-cli agents-configs-add-or-update 10000000dbb5bbc1 nmap_scripts=""`
 
 - Agents (Broadcast):
 

@@ -18,4 +18,4 @@ then
 fi
 
 source ./venv/bin/activate
-python3 -u ./siaas_cli.py $@ 
+python3 -u ./siaas_cli.py "$@"
