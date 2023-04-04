@@ -33,20 +33,32 @@ _cmd_options = [
                  help="Enable debug logs.", envvar='SIAAS_DEBUG_LOGS'),
     click.option('-C', '--colors', is_flag=True,
                  help="Enable colors in the output. Don't use this option if piping or redirecting the output!", envvar='SIAAS_OUTPUT_COLORS'),
-    click.option('-S', '--indent-spaces', help="Number of indentation spaces per level. (Default: 4)",
-                 envvar='SIAAS_INDENT_SPACES', default=4)
+    click.option('-S', '--indent-spaces', help="Number of indentation spaces per level in the output. (Default: 4)",
+                 envvar='SIAAS_OUTPUT_INDENT_SPACES', default=4)
 ]
 
 
 def add_options(options):
     """
-    Allows the reusal of a list of CLI options in different functions
+    Allows reusing the received list of CLI options, in different functions
     """
     def _add_options(func):
         for option in reversed(options):
             func = option(func)
         return func
     return _add_options
+
+
+def print_pretty_output(out_dict, indent=4, colors=False):
+    """
+    Receives an output dict and prints it in a pretty JSON format
+    Allows the number of indentation spaces to be changed, and to toggle output colorization
+    """
+    output_json = json.dumps(out_dict, indent=indent, ensure_ascii=False)
+    if colors:
+        output_json = highlight(
+            output_json, lexers.JsonLexer(), formatters.TerminalFormatter())
+    print(output_json)
 
 
 def grab_vulns_from_agent_data_dict(agent_data_dict, target_host=None, report_type="vuln_only"):
@@ -199,12 +211,7 @@ def api_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool,
             "Error while performing a GET request to the server API: "+str(e))
         exit(1)
     if r.status_code == 200:
-        output_json = json.dumps(
-            r.json(), indent=indent_spaces, ensure_ascii=False)
-        if colors:
-            output_json = highlight(
-                output_json, lexers.JsonLexer(), formatters.TerminalFormatter())
-        print(output_json)
+        print_pretty_output(r.json(), indent_spaces, colors)
         exit(0)
     else:
         logger.error("Error getting data from the server API: " +
@@ -245,12 +252,7 @@ def server_show(api: str, user: str, password: str, ca_bundle: str, insecure: bo
             "Error while performing a GET request to the server API: "+str(e))
         exit(1)
     if r.status_code == 200:
-        output_json = json.dumps(
-            r.json(), indent=indent_spaces, ensure_ascii=False)
-        if colors:
-            output_json = highlight(
-                output_json, lexers.JsonLexer(), formatters.TerminalFormatter())
-        print(output_json)
+        print_pretty_output(r.json(), indent_spaces, colors)
         exit(0)
     else:
         logger.error("Error getting data from the server API: " +
@@ -287,12 +289,7 @@ def server_configs_show(api: str, user: str, password: str, ca_bundle: str, inse
             "Error while performing a GET request to the server API: "+str(e))
         exit(1)
     if r.status_code == 200:
-        output_json = json.dumps(
-            r.json(), indent=indent_spaces, ensure_ascii=False)
-        if colors:
-            output_json = highlight(
-                output_json, lexers.JsonLexer(), formatters.TerminalFormatter())
-        print(output_json)
+        print_pretty_output(r.json(), indent_spaces, colors)
         exit(0)
     else:
         logger.error("Error getting data from the server API: " +
@@ -362,12 +359,7 @@ def server_configs_add_or_update(api: str, user: str, password: str, ca_bundle: 
     if r.status_code == 200:
         logger.debug("All data that was written to the server API:\n" +
                      pprint.pformat(new_config_dict, sort_dicts=False))
-        output_json = json.dumps(
-            r.json(), indent=indent_spaces, ensure_ascii=False)
-        if colors:
-            output_json = highlight(
-                output_json, lexers.JsonLexer(), formatters.TerminalFormatter())
-        print(output_json)
+        print_pretty_output(r.json(), indent_spaces, colors)
         exit(0)
     else:
         logger.error("Error posting data to the server API: " +
@@ -429,12 +421,7 @@ def server_configs_remove(api: str, user: str, password: str, ca_bundle: str, in
     if r.status_code == 200:
         logger.debug("All data that was written to the server API:\n" +
                      pprint.pformat(new_config_dict, sort_dicts=False))
-        output_json = json.dumps(
-            r.json(), indent=indent_spaces, ensure_ascii=False)
-        if colors:
-            output_json = highlight(
-                output_json, lexers.JsonLexer(), formatters.TerminalFormatter())
-        print(output_json)
+        print_pretty_output(r.json(), indent_spaces, colors)
         exit(0)
     else:
         logger.error("Error posting data to the server API: " +
@@ -472,12 +459,7 @@ def server_configs_clear(api: str, user: str, password: str, ca_bundle: str, ins
             "Error while performing a DELETE request to the server API: "+str(e))
         exit(1)
     if r.status_code == 200:
-        output_json = json.dumps(
-            r.json(), indent=indent_spaces, ensure_ascii=False)
-        if colors:
-            output_json = highlight(
-                output_json, lexers.JsonLexer(), formatters.TerminalFormatter())
-        print(output_json)
+        print_pretty_output(r.json(), indent_spaces, colors)
         exit(0)
     else:
         logger.error("Error deleting data from the server API: " +
@@ -518,12 +500,7 @@ def agents_show(api: str, user: str, password: str, ca_bundle: str, insecure: bo
             "Error while performing a GET request to the server API: "+str(e))
         exit(1)
     if r.status_code == 200:
-        output_json = json.dumps(
-            r.json(), indent=indent_spaces, ensure_ascii=False)
-        if colors:
-            output_json = highlight(
-                output_json, lexers.JsonLexer(), formatters.TerminalFormatter())
-        print(output_json)
+        print_pretty_output(r.json(), indent_spaces, colors)
         exit(0)
     else:
         logger.error("Error getting data from the server API: " +
@@ -568,12 +545,7 @@ def agents_data_show(api: str, user: str, password: str, ca_bundle: str, insecur
             "Error while performing a GET request to the server API: "+str(e))
         exit(1)
     if r.status_code == 200:
-        output_json = json.dumps(
-            r.json(), indent=indent_spaces, ensure_ascii=False)
-        if colors:
-            output_json = highlight(
-                output_json, lexers.JsonLexer(), formatters.TerminalFormatter())
-        print(output_json)
+        print_pretty_output(r.json(), indent_spaces, colors)
         exit(0)
     else:
         logger.error("Error getting data from the server API: " +
@@ -614,12 +586,7 @@ def agents_data_delete(api: str, user: str, password: str, ca_bundle: str, insec
             "Error while performing a DELETE request to the server API: "+str(e))
         exit(1)
     if r.status_code == 200:
-        output_json = json.dumps(
-            r.json(), indent=indent_spaces, ensure_ascii=False)
-        if colors:
-            output_json = highlight(
-                output_json, lexers.JsonLexer(), formatters.TerminalFormatter())
-        print(output_json)
+        print_pretty_output(r.json(), indent_spaces, colors)
         exit(0)
     else:
         logger.error("Error deleting data from the server API: " +
@@ -666,12 +633,7 @@ def agents_configs_show(api: str, user: str, password: str, ca_bundle: str, inse
             "Error while performing a GET request to the server API: "+str(e))
         exit(1)
     if r.status_code == 200:
-        output_json = json.dumps(
-            r.json(), indent=indent_spaces, ensure_ascii=False)
-        if colors:
-            output_json = highlight(
-                output_json, lexers.JsonLexer(), formatters.TerminalFormatter())
-        print(output_json)
+        print_pretty_output(r.json(), indent_spaces, colors)
         exit(0)
     else:
         logger.error("Error getting data from the server API: " +
@@ -746,12 +708,7 @@ def agents_configs_add_or_update(api: str, user: str, password: str, ca_bundle: 
         if r2.status_code == 200:
             logger.debug("All data that was written to the server API:\n" +
                          pprint.pformat(new_config_dict, sort_dicts=False))
-            output_json = json.dumps(
-                r2.json(), indent=indent_spaces, ensure_ascii=False)
-            if colors:
-                output_json = highlight(
-                    output_json, lexers.JsonLexer(), formatters.TerminalFormatter())
-            print(output_json)
+            print_pretty_output(r2.json(), indent_spaces, colors)
         else:
             logger.error(
                 "Error posting data to the server API: "+str(r2.status_code))
@@ -817,12 +774,7 @@ def agents_configs_remove(api: str, user: str, password: str, ca_bundle: str, in
         if r2.status_code == 200:
             logger.debug("All data that was written to the server API:\n" +
                          pprint.pformat(new_config_dict, sort_dicts=False))
-            output_json = json.dumps(
-                r2.json(), indent=indent_spaces, ensure_ascii=False)
-            if colors:
-                output_json = highlight(
-                    output_json, lexers.JsonLexer(), formatters.TerminalFormatter())
-            print(output_json)
+            print_pretty_output(r2.json(), indent_spaces, colors)
         else:
             logger.error(
                 "Error posting data to the server API: "+str(r2.status_code))
@@ -861,12 +813,7 @@ def agents_configs_clear(api: str, user: str, password: str, ca_bundle: str, ins
             "Error while performing a request to the server API: "+str(e))
         exit(1)
     if r.status_code == 200:
-        output_json = json.dumps(
-            r.json(), indent=indent_spaces, ensure_ascii=False)
-        if colors:
-            output_json = highlight(
-                output_json, lexers.JsonLexer(), formatters.TerminalFormatter())
-        print(output_json)
+        print_pretty_output(r.json(), indent_spaces, colors)
         exit(0)
     else:
         logger.error("Error interacting with the server API: " +
@@ -905,12 +852,7 @@ def agents_configs_broadcast_show(api: str, user: str, password: str, ca_bundle:
             "Error while performing a GET request to the server API: "+str(e))
         exit(1)
     if r.status_code == 200:
-        output_json = json.dumps(
-            r.json(), indent=indent_spaces, ensure_ascii=False)
-        if colors:
-            output_json = highlight(
-                output_json, lexers.JsonLexer(), formatters.TerminalFormatter())
-        print(output_json)
+        print_pretty_output(r.json(), indent_spaces, colors)
         exit(0)
     else:
         logger.error("Error getting data from the server API: " +
@@ -982,12 +924,7 @@ def agents_configs_broadcast_add_or_update(api: str, user: str, password: str, c
     if r.status_code == 200:
         logger.debug("All data that was written to the server API:\n" +
                      pprint.pformat(new_config_dict, sort_dicts=False))
-        output_json = json.dumps(
-            r.json(), indent=indent_spaces, ensure_ascii=False)
-        if colors:
-            output_json = highlight(
-                output_json, lexers.JsonLexer(), formatters.TerminalFormatter())
-        print(output_json)
+        print_pretty_output(r.json(), indent_spaces, colors)
         exit(0)
     else:
         logger.error("Error posting data to the server API: " +
@@ -1051,12 +988,7 @@ def agents_configs_broadcast_remove(api: str, user: str, password: str, ca_bundl
     if r.status_code == 200:
         logger.debug("All data that was written to the server API:\n" +
                      pprint.pformat(new_config_dict, sort_dicts=False))
-        output_json = json.dumps(
-            r.json(), indent=indent_spaces, ensure_ascii=False)
-        if colors:
-            output_json = highlight(
-                output_json, lexers.JsonLexer(), formatters.TerminalFormatter())
-        print(output_json)
+        print_pretty_output(r.json(), indent_spaces, colors)
         exit(0)
     else:
         logger.error("Error posting data to the server API: " +
@@ -1095,12 +1027,7 @@ def agents_configs_broadcast_clear(api: str, user: str, password: str, ca_bundle
             "Error while performing a DELETE request to the server API: "+str(e))
         exit(1)
     if r.status_code == 200:
-        output_json = json.dumps(
-            r.json(), indent=indent_spaces, ensure_ascii=False)
-        if colors:
-            output_json = highlight(
-                output_json, lexers.JsonLexer(), formatters.TerminalFormatter())
-        print(output_json)
+        print_pretty_output(r.json(), indent_spaces, colors)
         exit(0)
     else:
         logger.error("Error deleting data from the server API: " +
@@ -1164,12 +1091,7 @@ def agents_history_show(api: str, user: str, password: str, ca_bundle: str, inse
             "Error while performing a GET request to the server API: "+str(e))
         exit(1)
     if r.status_code == 200:
-        output_json = json.dumps(
-            r.json(), indent=indent_spaces, ensure_ascii=False)
-        if colors:
-            output_json = highlight(
-                output_json, lexers.JsonLexer(), formatters.TerminalFormatter())
-        print(output_json)
+        print_pretty_output(r.json(), indent_spaces, colors)
         exit(0)
     else:
         logger.error("Error getting data from the server API: " +
@@ -1226,13 +1148,7 @@ def vuln_report(api: str, user: str, password: str, ca_bundle: str, insecure: bo
     if vuln_dict == False:
         logger.error("There was an error getting vulnerability dict.")
         exit(1)
-    output_json = json.dumps(
-        vuln_dict, indent=indent_spaces, ensure_ascii=False)
-    if colors:
-        output_json = highlight(
-            output_json, lexers.JsonLexer(), formatters.TerminalFormatter())
-    print(output_json)
-
+    print_pretty_output(vuln_dict, indent_spaces, colors)
     exit(0)
 
 
