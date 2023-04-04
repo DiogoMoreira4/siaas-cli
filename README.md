@@ -33,6 +33,10 @@ API info: `siaas-cli api-show`
 
 API info, but change the number of indentation spaces to adapt readibility: `siaas-cli api-show -S 2`
 
+API info, but with a colorful output: `siaas-cli api-show -C`
+
+API info, but with no SSL CA verification: `siaas-cli api-show -I`
+
 - Server:
 
 Show server information and currently active configurations: `siaas-cli server-show`
