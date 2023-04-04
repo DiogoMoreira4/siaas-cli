@@ -31,7 +31,7 @@ __
 
 API info: `siaas-cli api-show`
 
-API info, but limit the number of chars per line to adapt readibility: `siaas-cli api-show -L 100`
+API info, but change the number of indentation spaces to adapt readibility: `siaas-cli api-show -S 2`
 
 - Server:
 
