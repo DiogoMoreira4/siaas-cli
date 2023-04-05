@@ -54,7 +54,8 @@ def print_pretty_output(out_dict, indent=4, colors=False):
     Receives an output dict and prints it in a pretty JSON format
     Allows the number of indentation spaces to be changed, and to toggle output colorization
     """
-    output_json = json.dumps(out_dict, indent=indent, ensure_ascii=False)
+    output_json = json.dumps(out_dict, indent=indent,
+                             sort_keys=False, ensure_ascii=False)
     if colors:
         output_json = highlight(
             output_json, lexers.JsonLexer(), formatters.TerminalFormatter())
