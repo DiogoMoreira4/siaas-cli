@@ -11,7 +11,7 @@ cd ${SCRIPT_DIR}
 
 # INSTALL PACKAGES
 apt-get update
-apt-get install -y python3 python3-pip python3-venv git || exit 1
+apt-get install -y python3 python3-pip python3-venv git ca-certificates || exit 1
 
 # SERVICE CONFIGURATION
 ln -fs ${SCRIPT_DIR}/siaas_cli_run.sh /usr/local/bin/siaas-cli
