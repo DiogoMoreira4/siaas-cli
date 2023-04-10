@@ -9,11 +9,7 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "`readlink -f ${BASH_SOURCE[0]}`" )" &> /dev/
 
 cd ${SCRIPT_DIR}
 
-# Reinstall venv if for some reason it disappeared
-if ! source ./venv/bin/activate 2> /dev/null
-then
-	./siaas_cli_venv_setup.sh
-fi
-
+python3 -m venv ./venv
 source ./venv/bin/activate
-python3 -u ./siaas_cli.py "$@"
+pip3 install -r ./requirements.txt
+pip3 install -U certifi # update CA certificates
