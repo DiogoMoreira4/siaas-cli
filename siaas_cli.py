@@ -8,7 +8,6 @@ import urllib3
 import pprint
 import json
 import logging
-import os
 import re
 from pygments import highlight, lexers, formatters
 
@@ -320,7 +319,6 @@ def server_configs_add_or_update(api: str, user: str, password: str, ca_bundle: 
             verify = ca_bundle
         else:
             verify = True
-    pattern = "^[A-Za-z0-9_-]*$"
     try:
         request_uri = api+"/siaas-server/configs"
         r = requests.get(request_uri, timeout=timeout, verify=verify,
@@ -336,7 +334,6 @@ def server_configs_add_or_update(api: str, user: str, password: str, ca_bundle: 
         logger.error("Error getting data from the server API: " +
                      str(r.status_code))
         exit(1)
-    current_config_dict = {}
     delta_config_dict = {}
     current_config_dict = r.json()["output"]
     for kv in re.split(''',(?=(?:[^'"]|'[^']*'|"[^"]*")*$)''', key_value):  # special handling of groups of comma-separated values within quotes
@@ -405,7 +402,6 @@ def server_configs_remove(api: str, user: str, password: str, ca_bundle: str, in
         logger.error("Error getting data from the server API: " +
                      str(r.status_code))
         exit(1)
-    current_config_dict = {}
     current_config_dict = r.json()["output"]
     new_config_dict = dict(current_config_dict)
     for k in key.split(','):
@@ -665,7 +661,6 @@ def agents_configs_add_or_update(api: str, user: str, password: str, ca_bundle: 
             verify = ca_bundle
         else:
             verify = True
-    pattern = "^[A-Za-z0-9_-]*$"
     try:
         request_uri = api+"/siaas-server/agents/configs/"+agent_uid
         r = requests.get(request_uri, timeout=timeout, verify=verify,
@@ -685,6 +680,7 @@ def agents_configs_add_or_update(api: str, user: str, password: str, ca_bundle: 
     for a in agent_uid.split(','):
         current_config_dict = {}
         delta_config_dict = {}
+        new_config_dict = {}
         if a in r.json()["output"].keys():
             current_config_dict = r.json()["output"][a]
         for kv in re.split(''',(?=(?:[^'"]|'[^']*'|"[^"]*")*$)''', key_value):  # special handling of groups of comma-separated values within quotes
@@ -696,6 +692,7 @@ def agents_configs_add_or_update(api: str, user: str, password: str, ca_bundle: 
                 logger.warning("Key-value '"+str(kv)+"' was ignored: "+str(e))
                 continue
             delta_config_dict[config_name] = config_value
+        r2 = "N/A"
         try:
             new_config_dict = dict(
                 list(current_config_dict.items()) + list(delta_config_dict.items()))
@@ -706,13 +703,17 @@ def agents_configs_add_or_update(api: str, user: str, password: str, ca_bundle: 
             logger.error(
                 "Error while performing a POST request to the server API: "+str(e))
             result = 1
-        if r2.status_code == 200:
+        if hasattr(r2, "status_code") and r2.status_code == 200:
             logger.debug("All data that was written to the server API:\n" +
                          pprint.pformat(new_config_dict, sort_dicts=False))
             print_pretty_output(r2.json(), indent_spaces, colors)
         else:
+            if hasattr(r2, "status_code"):
+                exit_code = r2.status_code
+            else:
+                exit_code = r2
             logger.error(
-                "Error posting data to the server API: "+str(r2.status_code))
+                "Error posting data to the server API: "+str(exit_code))
             result = 1
     exit(result)
 
@@ -764,6 +765,7 @@ def agents_configs_remove(api: str, user: str, password: str, ca_bundle: str, in
         for k in key.split(','):
             config_name = k.strip()
             new_config_dict.pop(config_name, None)
+        r2 = "N/A"
         try:
             request_uri = api+"/siaas-server/agents/configs/"+a
             r2 = requests.post(request_uri, json=new_config_dict, timeout=timeout,
@@ -772,13 +774,17 @@ def agents_configs_remove(api: str, user: str, password: str, ca_bundle: str, in
             logger.error(
                 "Error while performing a POST request to the server API: "+str(e))
             result = 1
-        if r2.status_code == 200:
+        if hasattr(r2, "status_code") and r2.status_code == 200:
             logger.debug("All data that was written to the server API:\n" +
                          pprint.pformat(new_config_dict, sort_dicts=False))
             print_pretty_output(r2.json(), indent_spaces, colors)
         else:
+            if hasattr(r2, "status_code"):
+                exit_code = r2.status_code
+            else:
+                exit_code = r2
             logger.error(
-                "Error posting data to the server API: "+str(r2.status_code))
+                "Error posting data to the server API: "+str(exit_code))
             result = 1
     exit(result)
 
@@ -884,7 +890,6 @@ def agents_configs_broadcast_add_or_update(api: str, user: str, password: str, c
         else:
             verify = True
     agent_uid = "ffffffff-ffff-ffff-ffff-ffffffffffff"
-    pattern = "^[A-Za-z0-9_-]*$"
     try:
         request_uri = api+"/siaas-server/agents/configs/"+agent_uid
         r = requests.get(request_uri, timeout=timeout, verify=verify,
