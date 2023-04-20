@@ -45,9 +45,9 @@ Publish server configuration key(s) (configure email and report type): `siaas-cl
 
 Show published configuration keys for the server: `siaas-cli server-configs-show`
 
-Remove published server configuration key 'mailer_smtp_recipients': `siaas-cli server-configs-remove mailer_smtp_recipients`
+Remove published server configuration key 'mailer_smtp_recipients' (go back to using local config file or default value for this key): `siaas-cli server-configs-remove mailer_smtp_recipients`
 
-Clear all published server configuration keys (restores config from server's local config file): `siaas-cli server-configs-clear`
+Clear all published server configuration keys (all configurations will reset to the server's local config file or defaults): `siaas-cli server-configs-clear`
 
 - Agents:
 
@@ -57,7 +57,7 @@ Show all metrics from all agents (usually this is too much data to read by the h
 
 Show the neighborhood of all agents: `siaas-cli agents-data-show -m neighborhood`
 
-Show the active configuration for an agent (defaults to local config file if no configs are published for a said key): `siaas-cli agents-data-show -m config 10000000dbb5bbc1`
+Show the active configuration for an agent (keys will show the local config file defaults if no value is published for them): `siaas-cli agents-data-show -m config 10000000dbb5bbc1`
 
 Publish configuration key(s) for an agent (configure hosts to scan and nmap scripts to run): `siaas-cli agents-configs-add-or-update 10000000dbb5bbc1 manual_hosts='"google.com,microsoft.com"',nmap_scripts='"vuln,vulscan"'`
 
@@ -65,23 +65,23 @@ Configure nickname and description for an agent: `siaas-cli agents-configs-add-o
 
 Show published configuration keys for an agent: `siaas-cli agents-configs-show 10000000dbb5bbc1`
 
-Remove published key 'nmap_scripts' for two agents (go back to using local config file): `siaas-cli agents-configs-remove 10000000dbb5bbc1,0924aa8b-6dc9-4fec-9716-d1601fc8b6c6 nmap_scripts`
+Remove published key 'nmap_scripts' for two agents (go back to using local config file or default value for this key): `siaas-cli agents-configs-remove 10000000dbb5bbc1,0924aa8b-6dc9-4fec-9716-d1601fc8b6c6 nmap_scripts`
 
-Clear all published configuration keys for an agent (restores config from agent's local config file): `siaas-cli agents-configs-clear 10000000dbb5bbc1`
+Clear all published configuration keys for an agent (all configurations will reset to the agent's local config file or defaults): `siaas-cli agents-configs-clear 10000000dbb5bbc1`
 
-Force this config to be empty (override local config): `siaas-cli agents-configs-add-or-update 10000000dbb5bbc1 nmap_scripts=""`
+Force a configuration value to be empty (this overrides local config or defaults for this key): `siaas-cli agents-configs-add-or-update 10000000dbb5bbc1 nmap_scripts=""`
 
-- Agents (Broadcast):
+- Agents (Broadcast configurations):
 
-Show published configurations for all agents (published single-agent configurations, if existing, will always take precedence): `siaas-cli agents-configs-broadcast-show`
+Show published broadcast configurations (note: published single-agent configurations, if existing, will always take precedence): `siaas-cli agents-configs-broadcast-show`
 
-Publish configuration key(s) for all agents (configure port scanning loop interval to twice a day, and to transfer data in loops of 2 hours): `siaas-cli agents-configs-broadcast-add-or-update portscanner_loop_interval_sec=43200,datatransfer_loop_interval_sec=7200`
+Publish broadcast configuration key(s) (configure port scanning loop interval to twice a day, and to transfer data in loops of 2 hours): `siaas-cli agents-configs-broadcast-add-or-update portscanner_loop_interval_sec=43200,datatransfer_loop_interval_sec=7200`
 
-Show published configuration keys for all agents: `siaas-cli agents-configs-broadcast-show`
+Show published broadcast configuration keys: `siaas-cli agents-configs-broadcast-show`
 
-Remove published key 'portscanner_loop_interval_sec' for all agents: `siaas-cli agents-configs-broadcast-remove portscanner_loop_interval_sec`
+Remove published broadcast key 'portscanner_loop_interval_sec': `siaas-cli agents-configs-broadcast-remove portscanner_loop_interval_sec`
 
-Clear all published configuration keys for all agents (restores config from agents' local config files): `siaas-cli agents-configs-broadcast-clear`
+Clear all published broadcast configuration keys: `siaas-cli agents-configs-broadcast-clear`
 
 - Vulnerability Report:
 
