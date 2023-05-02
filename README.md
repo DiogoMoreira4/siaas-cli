@@ -85,4 +85,8 @@ Clear all published broadcast configuration keys: `siaas-cli agents-configs-broa
 
 - Vulnerability Report:
 
-Show only exploitable vulnerabilities found in host '192.168.122.1': `siaas-cli vuln-report -r exploit_vuln_only -t 192.168.122.1`
+Show only exploitable vulnerabilities found in host '192.168.122.51': `siaas-cli vuln-report -t exploit_vuln_only -h 192.168.122.51`
+
+Show all port scanning information found in host '192.168.122.51', for HTTP/HTTPS ports only: `siaas-cli vuln-report -t all -h 192.168.122.51 | jq '.[].portscanner[].scanned_ports["80/tcp","443/tcp"]'`
+
+Show all port scanning information found in host '192.168.122.51', for script 'vulscan' only: `siaas-cli vuln-report -t all -h 192.168.122.51 | jq '.[].portscanner[].scanned_ports[].scan_results."vulscan"'`

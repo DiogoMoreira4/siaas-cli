@@ -9,6 +9,7 @@ import pprint
 import json
 import logging
 import re
+import sys
 from pygments import highlight, lexers, formatters
 
 logger = logging.getLogger(__name__)
@@ -31,7 +32,7 @@ _cmd_options = [
     click.option('-D', '--debug', is_flag=True,
                  help="Enable debug logs.", envvar='SIAAS_DEBUG_LOGS'),
     click.option('-C', '--colors', is_flag=True,
-                 help="Enable colors in the output. Don't use this option if piping or redirecting the output!", envvar='SIAAS_OUTPUT_COLORS'),
+                 help="Enable colors in the output.", envvar='SIAAS_OUTPUT_COLORS'),
     click.option('-S', '--indent-spaces', help="Number of indentation spaces per level in the output. (Default: 4)",
                  envvar='SIAAS_OUTPUT_INDENT_SPACES', default=4)
 ]
@@ -52,10 +53,11 @@ def print_pretty_output(out_dict, indent=4, colors=False):
     """
     Receives an output dict and prints it in a pretty JSON format
     Allows the number of indentation spaces to be changed, and to toggle output colorization
+    Will always disable colors if the output is being redirected
     """
     output_json = json.dumps(out_dict, indent=indent,
                              sort_keys=False, ensure_ascii=False)
-    if colors:
+    if colors and sys.stdout.isatty():  # only colorize json if the output is the terminal
         output_json = highlight(
             output_json, lexers.JsonLexer(), formatters.TerminalFormatter())
     print(output_json)
@@ -196,7 +198,7 @@ def api_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool,
     urllib3.disable_warnings()
     if insecure == True:
         logger.warning(
-            "SSL verification is off! The validity of the CA will not be verified.")
+            "SSL verification is off! The validity of the CA is not being verified.")
         verify = False
     else:
         if len(ca_bundle or '') > 0:
@@ -234,7 +236,7 @@ def server_show(api: str, user: str, password: str, ca_bundle: str, insecure: bo
     urllib3.disable_warnings()
     if insecure == True:
         logger.warning(
-            "SSL verification is off! The validity of the CA will not be verified.")
+            "SSL verification is off! The validity of the CA is not being verified.")
         verify = False
     else:
         if len(ca_bundle or '') > 0:
@@ -274,7 +276,7 @@ def server_configs_show(api: str, user: str, password: str, ca_bundle: str, inse
     urllib3.disable_warnings()
     if insecure == True:
         logger.warning(
-            "SSL verification is off! The validity of the CA will not be verified.")
+            "SSL verification is off! The validity of the CA is not being verified.")
         verify = False
     else:
         if len(ca_bundle or '') > 0:
@@ -312,7 +314,7 @@ def server_configs_add_or_update(api: str, user: str, password: str, ca_bundle: 
     urllib3.disable_warnings()
     if insecure == True:
         logger.warning(
-            "SSL verification is off! The validity of the CA will not be verified.")
+            "SSL verification is off! The validity of the CA is not being verified.")
         verify = False
     else:
         if len(ca_bundle or '') > 0:
@@ -380,7 +382,7 @@ def server_configs_remove(api: str, user: str, password: str, ca_bundle: str, in
     urllib3.disable_warnings()
     if insecure == True:
         logger.warning(
-            "SSL verification is off! The validity of the CA will not be verified.")
+            "SSL verification is off! The validity of the CA is not being verified.")
         verify = False
     else:
         if len(ca_bundle or '') > 0:
@@ -440,7 +442,7 @@ def server_configs_clear(api: str, user: str, password: str, ca_bundle: str, ins
     urllib3.disable_warnings()
     if insecure == True:
         logger.warning(
-            "SSL verification is off! The validity of the CA will not be verified.")
+            "SSL verification is off! The validity of the CA is not being verified.")
         verify = False
     else:
         if len(ca_bundle or '') > 0:
@@ -479,7 +481,7 @@ def agents_show(api: str, user: str, password: str, ca_bundle: str, insecure: bo
     urllib3.disable_warnings()
     if insecure == True:
         logger.warning(
-            "SSL verification is off! The validity of the CA will not be verified.")
+            "SSL verification is off! The validity of the CA is not being verified.")
         verify = False
     else:
         if len(ca_bundle or '') > 0:
@@ -521,7 +523,7 @@ def agents_data_show(api: str, user: str, password: str, ca_bundle: str, insecur
     urllib3.disable_warnings()
     if insecure == True:
         logger.warning(
-            "SSL verification is off! The validity of the CA will not be verified.")
+            "SSL verification is off! The validity of the CA is not being verified.")
         verify = False
     else:
         if len(ca_bundle or '') > 0:
@@ -566,7 +568,7 @@ def agents_data_delete(api: str, user: str, password: str, ca_bundle: str, insec
     urllib3.disable_warnings()
     if insecure == True:
         logger.warning(
-            "SSL verification is off! The validity of the CA will not be verified.")
+            "SSL verification is off! The validity of the CA is not being verified.")
         verify = False
     else:
         if len(ca_bundle or '') > 0:
@@ -607,7 +609,7 @@ def agents_configs_show(api: str, user: str, password: str, ca_bundle: str, inse
     urllib3.disable_warnings()
     if insecure == True:
         logger.warning(
-            "SSL verification is off! The validity of the CA will not be verified.")
+            "SSL verification is off! The validity of the CA is not being verified.")
         verify = False
     else:
         if len(ca_bundle or '') > 0:
@@ -654,7 +656,7 @@ def agents_configs_add_or_update(api: str, user: str, password: str, ca_bundle: 
     urllib3.disable_warnings()
     if insecure == True:
         logger.warning(
-            "SSL verification is off! The validity of the CA will not be verified.")
+            "SSL verification is off! The validity of the CA is not being verified.")
         verify = False
     else:
         if len(ca_bundle or '') > 0:
@@ -734,7 +736,7 @@ def agents_configs_remove(api: str, user: str, password: str, ca_bundle: str, in
     urllib3.disable_warnings()
     if insecure == True:
         logger.warning(
-            "SSL verification is off! The validity of the CA will not be verified.")
+            "SSL verification is off! The validity of the CA is not being verified.")
         verify = False
     else:
         if len(ca_bundle or '') > 0:
@@ -804,7 +806,7 @@ def agents_configs_clear(api: str, user: str, password: str, ca_bundle: str, ins
     urllib3.disable_warnings()
     if insecure == True:
         logger.warning(
-            "SSL verification is off! The validity of the CA will not be verified.")
+            "SSL verification is off! The validity of the CA is not being verified.")
         verify = False
     else:
         if len(ca_bundle or '') > 0:
@@ -842,7 +844,7 @@ def agents_configs_broadcast_show(api: str, user: str, password: str, ca_bundle:
     urllib3.disable_warnings()
     if insecure == True:
         logger.warning(
-            "SSL verification is off! The validity of the CA will not be verified.")
+            "SSL verification is off! The validity of the CA is not being verified.")
         verify = False
     else:
         if len(ca_bundle or '') > 0:
@@ -882,7 +884,7 @@ def agents_configs_broadcast_add_or_update(api: str, user: str, password: str, c
     urllib3.disable_warnings()
     if insecure == True:
         logger.warning(
-            "SSL verification is off! The validity of the CA will not be verified.")
+            "SSL verification is off! The validity of the CA is not being verified.")
         verify = False
     else:
         if len(ca_bundle or '') > 0:
@@ -953,7 +955,7 @@ def agents_configs_broadcast_remove(api: str, user: str, password: str, ca_bundl
     urllib3.disable_warnings()
     if insecure == True:
         logger.warning(
-            "SSL verification is off! The validity of the CA will not be verified.")
+            "SSL verification is off! The validity of the CA is not being verified.")
         verify = False
     else:
         if len(ca_bundle or '') > 0:
@@ -1016,7 +1018,7 @@ def agents_configs_broadcast_clear(api: str, user: str, password: str, ca_bundle
     urllib3.disable_warnings()
     if insecure == True:
         logger.warning(
-            "SSL verification is off! The validity of the CA will not be verified.")
+            "SSL verification is off! The validity of the CA is not being verified.")
         verify = False
     else:
         if len(ca_bundle or '') > 0:
@@ -1062,7 +1064,7 @@ def agents_history_show(api: str, user: str, password: str, ca_bundle: str, inse
     urllib3.disable_warnings()
     if insecure == True:
         logger.warning(
-            "SSL verification is off! The validity of the CA will not be verified.")
+            "SSL verification is off! The validity of the CA is not being verified.")
         verify = False
     else:
         if len(ca_bundle or '') > 0:
@@ -1122,7 +1124,7 @@ def vuln_report(api: str, user: str, password: str, ca_bundle: str, insecure: bo
     urllib3.disable_warnings()
     if insecure == True:
         logger.warning(
-            "SSL verification is off! The validity of the CA will not be verified.")
+            "SSL verification is off! The validity of the CA is not being verified.")
         verify = False
     else:
         if len(ca_bundle or '') > 0:
