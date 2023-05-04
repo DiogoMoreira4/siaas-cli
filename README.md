@@ -57,6 +57,10 @@ Show all metrics from all agents (usually this is too much data to read by the h
 
 Show the neighborhood of all agents: `siaas-cli agents-data-show -m neighborhood`
 
+Show all historical data: `siaas-cli agents-history-show`
+
+Show historical data only for the portscanner module, sorting by agent UID, for last 2 days, while hiding the empty entries: `siaas-cli agents-history-show -m portscanner -s agent -d 2 -h`
+
 Show the currently active configurations for an agent (keys will show the local config file or defaults if no value is published for them): `siaas-cli agents-data-show -m config 10000000dbb5bbc1`
 
 Publish configuration key(s) for an agent (configure hosts to scan and nmap scripts to run): `siaas-cli agents-configs-add-or-update 10000000dbb5bbc1 manual_hosts='"google.com,microsoft.com"',nmap_scripts='"vuln,vulscan"'`
