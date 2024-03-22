@@ -1,6 +1,6 @@
 # Intelligent System for Automation of Security Audits (SIAAS)
 # Command Line Interface
-# By João Pedro Seara, 2023
+# By João Pedro Seara, 2022-2024
 
 import click
 import requests
@@ -14,7 +14,7 @@ from pygments import highlight, lexers, formatters
 
 logger = logging.getLogger(__name__)
 
-SIAAS_VERSION = "1.0.0"
+SIAAS_VERSION = "1.0.1"
 
 _cmd_options = [
     click.option('-A', '--api', help="SIAAS API URI. (Default: https://127.0.0.1/api)",
