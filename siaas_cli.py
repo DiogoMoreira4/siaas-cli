@@ -1159,6 +1159,49 @@ def vuln_report(api: str, user: str, password: str, ca_bundle: str, insecure: bo
     print_pretty_output(vuln_dict, indent_spaces, colors)
     exit(0)
 
+@add_options(_cmd_options)
+@click.argument('target', nargs=1, required=0)
+@siaas.command("zap-data-show")
+def zap_results_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, indent_spaces: int, colors: bool, target: str):
+    """
+    Shows most recent data/metrics from agents (accepts multiple agent UIDs, comma-separated).
+    """
+    if debug:
+        log_level = logging.DEBUG
+    else:
+        log_level = logging.WARN
+    logging.basicConfig(level=log_level)
+    urllib3.disable_warnings()
+    if insecure == True:
+        logger.warning(
+            "SSL verification is off! The validity of the CA is not being verified.")
+        verify = False
+    else:
+        if len(ca_bundle or '') > 0:
+            verify = ca_bundle
+        else:
+            verify = True
+    try:
+        if target:
+            request_uri = api+"/siaas-server/siaas-zap/results/"+target
+        else:
+            request_uri = api+"/siaas-server/siaas-zap/results"
+    
+        r = requests.get(request_uri, timeout=timeout, verify=verify,
+                         allow_redirects=True, auth=(user, password))
+    except Exception as e:
+        logger.error(
+            "Error while performing a GET request to the server API: "+str(e))
+        exit(1)
+    if r.status_code == 200:
+        print_pretty_output(r.json(), indent_spaces, colors)
+        exit(0)
+    else:
+        logger.error("Error getting data from the server API: " +
+                     str(r.status_code))
+        exit(1)
+
+
 
 if __name__ == '__main__':
     siaas(prog_name='siaas-cli')
