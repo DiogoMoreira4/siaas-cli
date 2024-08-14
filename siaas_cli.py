@@ -1159,12 +1159,12 @@ def vuln_report(api: str, user: str, password: str, ca_bundle: str, insecure: bo
     print_pretty_output(vuln_dict, indent_spaces, colors)
     exit(0)
 
+@siaas.command("zap-config-show")
 @add_options(_cmd_options)
-@click.argument('target', nargs=1, required=0)
-@siaas.command("zap-data-show")
-def zap_results_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, indent_spaces: int, colors: bool, target: str):
+@click.argument('section', required=False)
+def zap_config_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, indent_spaces: int, colors: bool, section: str):
     """
-    Shows most recent data/metrics from agents (accepts multiple agent UIDs, comma-separated).
+    Shows the ZAP or automation plan configurations. Optionally specify a section.
     """
     if debug:
         log_level = logging.DEBUG
@@ -1181,26 +1181,200 @@ def zap_results_show(api: str, user: str, password: str, ca_bundle: str, insecur
             verify = ca_bundle
         else:
             verify = True
-    try:
-        if target:
-            request_uri = api+"/siaas-server/siaas-zap/results/"+target
-        else:
-            request_uri = api+"/siaas-server/siaas-zap/results"
     
-        r = requests.get(request_uri, timeout=timeout, verify=verify,
-                         allow_redirects=True, auth=(user, password))
+    try:
+        if section:
+            request_uri = f"{api}/siaas-server/siaas-zap/config/{section}"
+        else:
+            request_uri = f"{api}/siaas-server/siaas-zap/config"
+        
+        r = requests.get(request_uri, timeout=timeout, verify=verify, auth=(user, password))
     except Exception as e:
-        logger.error(
-            "Error while performing a GET request to the server API: "+str(e))
+        logger.error("Error while performing a GET request to the server API: " + str(e))
         exit(1)
+        
     if r.status_code == 200:
         print_pretty_output(r.json(), indent_spaces, colors)
         exit(0)
     else:
-        logger.error("Error getting data from the server API: " +
-                     str(r.status_code))
+        logger.error("Error getting configuration data from the server API: " + str(r.status_code))
+        exit(1)
+        
+@siaas.command("zap-config-update")
+@add_options(_cmd_options)
+@click.argument('section', required=True)
+@click.option('--value', required=True, help="New value for the configuration key (in JSON format).")
+def zap_config_update(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, indent_spaces: int, colors: bool, section: str, value: str):
+    """
+    Updates the value for existing keys in a specific section.
+    The key must already exist in the configuration.
+    """
+    if debug:
+        log_level = logging.DEBUG
+    else:
+        log_level = logging.WARN
+    logging.basicConfig(level=log_level)
+    urllib3.disable_warnings()
+    if insecure == True:
+        logger.warning(
+            "SSL verification is off! The validity of the CA is not being verified.")
+        verify = False
+    else:
+        if len(ca_bundle or '') > 0:
+            verify = ca_bundle
+        else:
+            verify = True
+    
+    try:
+        # Convert value from JSON string to Python dictionary
+        data = json.loads(value)
+        
+        request_uri = f"{api}/siaas-server/siaas-zap/config/{section}"
+        
+        # Fetch current configuration to ensure keys exist
+        r_get = requests.get(request_uri, timeout=timeout, verify=verify, auth=(user, password))
+        if r_get.status_code != 200:
+            logger.error("Error fetching current configuration from the server API: " + str(r_get.status_code))
+            exit(1)
+        
+        current_config = r_get.json().get(section, {})
+        
+        # Ensure all keys in the update exist in the current config
+        for key in data:
+            if key not in current_config:
+                logger.error(f"Key '{key}' does not exist in section '{section}'. Cannot update non-existing keys.")
+                exit(1)
+        
+        # Send the updated values
+        r_post = requests.post(request_uri, json=data, timeout=timeout, verify=verify, auth=(user, password))
+    except json.JSONDecodeError:
+        logger.error("Invalid JSON format for value.")
+        exit(1)
+    except Exception as e:
+        logger.error("Error while performing a POST request to the server API: " + str(e))
+        exit(1)
+        
+    if r_post.status_code == 200:
+        print("Configuration updated successfully.")
+        exit(0)
+    else:
+        logger.error("Error updating configuration on the server API: " + str(r_post.status_code))
         exit(1)
 
+@siaas.command("zap-targets-list")
+@add_options(_cmd_options)
+def zap_targets_list(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, indent_spaces: int, colors: bool):
+    """
+    Lists all targets that have been analyzed (only target names).
+    """
+    if debug:
+        log_level = logging.DEBUG
+    else:
+        log_level = logging.WARN
+    logging.basicConfig(level=log_level)
+    urllib3.disable_warnings()
+    if insecure == True:
+        logger.warning(
+            "SSL verification is off! The validity of the CA is not being verified.")
+        verify = False
+    else:
+        if len(ca_bundle or '') > 0:
+            verify = ca_bundle
+        else:
+            verify = True
+    
+    try:
+        request_uri = api + "/siaas-server/siaas-zap/results"
+        r = requests.get(request_uri, timeout=timeout, verify=verify, auth=(user, password))
+    except Exception as e:
+        logger.error("Error while performing a GET request to the server API: " + str(e))
+        exit(1)
+        
+    if r.status_code == 200:
+        results = r.json().get('output', [])
+        targets = [result.get('target') for result in results if 'target' in result]
+        for target in targets:
+            print(target)
+        exit(0)
+    else:
+        logger.error("Error getting data from the server API: " + str(r.status_code))
+        exit(1)
+
+@siaas.command("zap-results-show")
+@add_options(_cmd_options)
+@click.argument('target', required=True)
+@click.option('--risk', default=None, help="Comma-separated risk levels to filter alerts (e.g., High,Medium).")
+def zap_results_show(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, indent_spaces: int, colors: bool, target: str, risk: str):
+    """
+    Shows results for a specific target, with optional risk filtering.
+    """
+    if debug:
+        log_level = logging.DEBUG
+    else:
+        log_level = logging.WARN
+    logging.basicConfig(level=log_level)
+    urllib3.disable_warnings()
+    if insecure == True:
+        logger.warning(
+            "SSL verification is off! The validity of the CA is not being verified.")
+        verify = False
+    else:
+        if len(ca_bundle or '') > 0:
+            verify = ca_bundle
+        else:
+            verify = True
+    
+    try:
+        request_uri = f"{api}/siaas-server/siaas-zap/results/{target}"
+        params = {'risk': risk} if risk else {}
+        r = requests.get(request_uri, params=params, timeout=timeout, verify=verify, auth=(user, password))
+    except Exception as e:
+        logger.error("Error while performing a GET request to the server API: " + str(e))
+        exit(1)
+        
+    if r.status_code == 200:
+        print_pretty_output(r.json(), indent_spaces, colors)
+        exit(0)
+    else:
+        logger.error("Error getting data from the server API: " + str(r.status_code))
+        exit(1)
+
+@siaas.command("zap-results-delete")
+@add_options(_cmd_options)
+@click.argument('target', required=True)
+def zap_results_delete(api: str, user: str, password: str, ca_bundle: str, insecure: bool, timeout: int, debug: bool, indent_spaces: int, colors: bool, target: str):
+    """
+    Deletes results for a specific target.
+    """
+    if debug:
+        log_level = logging.DEBUG
+    else:
+        log_level = logging.WARN
+    logging.basicConfig(level=log_level)
+    urllib3.disable_warnings()
+    if insecure == True:
+        logger.warning(
+            "SSL verification is off! The validity of the CA is not being verified.")
+        verify = False
+    else:
+        if len(ca_bundle or '') > 0:
+            verify = ca_bundle
+        else:
+            verify = True
+    
+    try:
+        request_uri = f"{api}/siaas-server/siaas-zap/results/{target}"
+        r = requests.delete(request_uri, timeout=timeout, verify=verify, auth=(user, password))
+    except Exception as e:
+        logger.error("Error while performing a DELETE request to the server API: " + str(e))
+        exit(1)
+        
+    if r.status_code == 200:
+        print("Target deleted successfully.")
+        exit(0)
+    else:
+        logger.error("Error deleting data from the server API: " + str(r.status_code))
+        exit(1)
 
 
 if __name__ == '__main__':
